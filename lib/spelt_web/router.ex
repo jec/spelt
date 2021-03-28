@@ -8,13 +8,13 @@ defmodule SpeltWeb.Router do
   scope "/.well-known/matrix", SpeltWeb do
     pipe_through :api
 
-    get "/client", WellKnownController, :client
+    get "/client", ConfigController, :client
   end
 
   scope "/_matrix/client", SpeltWeb do
     pipe_through :api
 
-    get "/versions", VersionsController, :versions
+    get "/versions", ConfigController, :versions
 
     scope "/r0", R0 do
       get "/login", LoginController, :show
