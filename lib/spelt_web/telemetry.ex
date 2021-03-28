@@ -1,4 +1,8 @@
 defmodule SpeltWeb.Telemetry do
+  @moduledoc """
+  Implements metrics based on `Telemetry.Metrics`
+  """
+
   use Supervisor
   import Telemetry.Metrics
 

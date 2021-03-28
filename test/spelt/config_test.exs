@@ -5,7 +5,7 @@ defmodule Spelt.ConfigTest do
 
   describe "Config.versions/0" do
     test "returns supported client/server versions" do
-      assert Config.versions() == ["r0.6.1"]
+      assert Config.versions() == ~w(r0.6.1)
     end
   end
 end

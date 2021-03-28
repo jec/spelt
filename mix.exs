@@ -20,7 +20,7 @@ defmodule Spelt.MixProject do
   def application do
     [
       mod: {Spelt.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :crypto]
     ]
   end
 
@@ -34,13 +34,16 @@ defmodule Spelt.MixProject do
   defp deps do
     [
       {:bolt_sips, "~> 2.0"},
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.2"},
+      {:joken, "~> 2.3"},
       {:phoenix, "~> 1.5.8"},
       {:phoenix_live_dashboard, "~> 0.4"},
       {:plug_cowboy, "~> 2.0"},
       {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"}
+      {:telemetry_poller, "~> 0.4"},
+      {:uuid, "~> 1.1"}
     ]
   end
 

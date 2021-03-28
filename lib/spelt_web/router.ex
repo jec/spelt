@@ -5,11 +5,13 @@ defmodule SpeltWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/.well-known/matrix", SpeltWeb do
-    pipe_through :api
-
-    get "/client", ConfigController, :client
-  end
+  # This one may not need to be implemented here but instead handled by the
+  # proxy.
+  # scope "/.well-known/matrix", SpeltWeb do
+  #   pipe_through :api
+  #
+  #   get "/client", ConfigController, :client
+  # end
 
   scope "/_matrix/client", SpeltWeb do
     pipe_through :api
@@ -18,6 +20,7 @@ defmodule SpeltWeb.Router do
 
     scope "/r0", R0 do
       get "/login", LoginController, :show
+      post "/login", LoginController, :create
     end
   end
 
