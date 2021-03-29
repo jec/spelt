@@ -1,6 +1,13 @@
 defmodule SpeltWeb.R0.LoginControllerTest do
   use SpeltWeb.ConnCase
 
+  def create_user(username, password) do
+    cypher = """
+      CREATE (:User {user_id: '#{username}', password: '#{password}'})
+    """
+    {:ok, _} = Bolt.Sips.conn() |> Bolt.Sips.query(cypher)
+  end
+
   describe "GET /_matrix/client/r0/login" do
     test "returns the supported login types", %{conn: conn} do
       conn = get(conn, Routes.login_path(conn, :show))
@@ -11,9 +18,12 @@ defmodule SpeltWeb.R0.LoginControllerTest do
 
   describe "POST /_matrix/client/r0/login" do
     test "with correct authentication, returns a 200 and a token", %{conn: conn} do
-      user_id = "@phred.smerd:localhost"
-      password = "foobarbaz"
+      username = "phred.smerd"
+      user_id = "@#{username}:#{conn.host}"
+      password = UUID.uuid4()
       device_id = "mydeviceid"
+
+      create_user(username, password)
 
       params = %{
         type: "m.login.password",

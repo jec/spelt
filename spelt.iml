@@ -89,6 +89,8 @@
       <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/credo" />
       <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/bunt" />
       <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/file_system" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/ex_machina" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/faker" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="phoenix" level="project" />
@@ -150,5 +152,10 @@
     <orderEntry type="library" name="ojson" level="project" />
     <orderEntry type="library" name="file_system" level="project" />
     <orderEntry type="library" name="bunt" level="project" />
+    <orderEntry type="library" name="ex_machina" level="project" />
+    <orderEntry type="library" name="ecto" level="project" />
+    <orderEntry type="library" name="ecto_sql" level="project" />
+    <orderEntry type="library" name="postgrex" level="project" />
+    <orderEntry type="library" name="faker" level="project" />
   </component>
 </module>

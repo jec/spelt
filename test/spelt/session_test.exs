@@ -1,12 +1,7 @@
 defmodule Spelt.SessionTest do
-  use ExUnit.Case
+  use Spelt.Case
 
   alias Spelt.Session
-
-  # TODO: Put this in a common Case module.
-  setup _tags do
-    on_exit(fn -> {:ok, _} = Bolt.Sips.conn() |> Bolt.Sips.query("MATCH (x) DETACH DELETE x") end)
-  end
 
   def create_user(username, password) do
     cypher = """

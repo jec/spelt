@@ -32,6 +32,10 @@ defmodule SpeltWeb.ConnCase do
   end
 
   setup _tags do
+    # TODO: Put this in a place that is shared with Spelt.Case.
+    # Delete all nodes from the database after each test.
+    on_exit(fn -> {:ok, _} = Bolt.Sips.conn() |> Bolt.Sips.query("MATCH (x) DETACH DELETE x") end)
+
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end
