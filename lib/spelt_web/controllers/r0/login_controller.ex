@@ -1,5 +1,3 @@
-require IEx
-
 defmodule SpeltWeb.R0.LoginController do
   use SpeltWeb, :controller
 
@@ -8,8 +6,7 @@ defmodule SpeltWeb.R0.LoginController do
   end
 
   def create(conn, params) do
-#    IEx.pry()
-    %{body: body, status: status} = Spelt.Session.log_in(params)
+    %{body: body, status: status} = Spelt.Session.log_in(conn, params)
     conn
     |> put_status(status)
     |> json(body)

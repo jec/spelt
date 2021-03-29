@@ -11,6 +11,8 @@ defmodule Spelt.Application do
       SpeltWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Spelt.PubSub},
+      # Start the Neo4j driver
+      {Bolt.Sips, Application.get_env(:bolt_sips, Bolt)},
       # Start the Endpoint (http/https)
       SpeltWeb.Endpoint
       # Start a worker by calling: Spelt.Worker.start_link(arg)
