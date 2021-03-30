@@ -157,5 +157,6 @@
     <orderEntry type="library" name="ecto_sql" level="project" />
     <orderEntry type="library" name="postgrex" level="project" />
     <orderEntry type="library" name="faker" level="project" />
+    <orderEntry type="library" name="decimal" level="project" />
   </component>
 </module>
