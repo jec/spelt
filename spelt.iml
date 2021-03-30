@@ -91,6 +91,14 @@
       <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/file_system" />
       <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/ex_machina" />
       <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/faker" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/inflex" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/decimal" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/ecto" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/seraph" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/inflex" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/decimal" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/ecto" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/seraph" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="phoenix" level="project" />
@@ -157,5 +165,8 @@
     <orderEntry type="library" name="ecto_sql" level="project" />
     <orderEntry type="library" name="postgrex" level="project" />
     <orderEntry type="library" name="faker" level="project" />
+    <orderEntry type="library" name="seraph" level="project" />
+    <orderEntry type="library" name="inflex" level="project" />
+    <orderEntry type="library" name="decimal" level="project" />
   </component>
 </module>

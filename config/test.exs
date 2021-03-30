@@ -6,8 +6,8 @@ config :spelt, SpeltWeb.Endpoint,
   http: [port: 4002],
   server: false
 
-# Neo4j connection
-config :bolt_sips, Bolt,
+# Neo4j connection through Seraph
+config :spelt, Spelt.Repo,
        url: "bolt://localhost:7697",
        basic_auth: [username: "neo4j", password: "9*Ep$Wy#Re8gK4oMggv"],
        pool_size: 10
