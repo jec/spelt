@@ -8,8 +8,8 @@ config :spelt, SpeltWeb.Endpoint,
 
 # Neo4j connection through Seraph
 config :spelt, Spelt.Repo,
-       url: "bolt://localhost:7697",
-       basic_auth: [username: "neo4j", password: "9*Ep$Wy#Re8gK4oMggv"],
+       url: to_string(:os.getenv('TEST_DB_URL')),
+       basic_auth: [username: "neo4j", password: to_string(:os.getenv('TEST_DB_PASSWORD'))],
        pool_size: 10
 
 # Print only warnings and errors during test
