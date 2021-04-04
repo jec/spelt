@@ -99,6 +99,8 @@
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/decimal" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/ecto" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/seraph" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/meck" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/espec" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="phoenix" level="project" />
@@ -168,5 +170,7 @@
     <orderEntry type="library" name="seraph" level="project" />
     <orderEntry type="library" name="inflex" level="project" />
     <orderEntry type="library" name="decimal" level="project" />
+    <orderEntry type="library" name="espec" level="project" />
+    <orderEntry type="library" name="meck" level="project" />
   </component>
 </module>

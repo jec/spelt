@@ -13,9 +13,11 @@ defmodule Spelt.Session.User do
     property :email, :string
   end
 
+  # TODO: This isn't working.
+  def __schema__(:redact_fields), do: [:password]
+
   def changeset(%Spelt.Session.User{} = user, params \\ %{}) do
     user
     |> cast(params, [:identifier, :password, :name, :email])
-    |> validate_required([:identifier, :password, :name, :email])
   end
 end

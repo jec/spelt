@@ -23,6 +23,7 @@ defmodule SpeltWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import SpeltWeb.ConnCase
+      import Spelt.Factory
 
       alias SpeltWeb.Router.Helpers, as: Routes
 

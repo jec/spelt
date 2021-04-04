@@ -10,6 +10,7 @@ defmodule Spelt.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
+      preferred_cli_env: [espec: :test],
       deps: deps()
     ]
   end
@@ -33,9 +34,7 @@ defmodule Spelt.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
-      {:ex_machina, "~> 2.7.0", only: :test},
-      {:faker, "~> 0.16.0", only: :test},
+      {:ecto, "~> 3.5.0"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.2"},
       {:joken, "~> 2.3"},
@@ -45,7 +44,12 @@ defmodule Spelt.MixProject do
       {:seraph, "~> 0.2"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
-      {:uuid, "~> 1.1"}
+      {:uuid, "~> 1.1"},
+      # dev and test
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:espec, "~> 1.8.0", only: :test},
+      {:ex_machina, "~> 2.7.0", only: :test},
+      {:faker, "~> 0.16.0", only: :test}
     ]
   end
 

@@ -17,9 +17,7 @@ defmodule Spelt.SessionTest do
       password = UUID.uuid4()
       conn = %{host: host}
 
-      user = build(:user)
-      IO.inspect(user)
-      {:ok, user} = Spelt.Repo.Node.create(user)
+      {:ok, _} = Spelt.Repo.Node.create(build(:user, identifier: identifier, password: password))
 
       params = %{
         "type" => "m.login.password",
@@ -32,24 +30,24 @@ defmodule Spelt.SessionTest do
       }
 
       assert %{
-        body: %{
-          user_id: ^user_id,
-          access_token: _,
-          device_id: _
-        },
-        status: 200
-      } = Session.log_in(conn, params)
+               body: %{
+                 user_id: ^user_id,
+                 access_token: _,
+                 device_id: _
+               },
+               status: 200
+             } = Session.log_in(conn, params)
     end
 
-    test "with valid credentials and a device_id, returns status 200" do
+    test "with valid credentials and a device_id, returns the same device_id and status 200" do
       host = "example.cc"
       identifier = "phred.smerd"
       user_id = "@#{identifier}:#{host}"
       password = UUID.uuid4()
       conn = %{host: host}
-      device_id = "mydeviceid"
+      device_id = UUID.uuid4()
 
-#      create_user(identifier, password)
+      {:ok, _} = Spelt.Repo.Node.create(build(:user, identifier: identifier, password: password))
 
       params = %{
         "type" => "m.login.password",
@@ -79,7 +77,7 @@ defmodule Spelt.SessionTest do
       password = UUID.uuid4()
       conn = %{host: host}
 
-#      create_user(identifier, password)
+      {:ok, _} = Spelt.Repo.Node.create(build(:user, identifier: identifier, password: password))
 
       params = %{
         "type" => "m.login.password",
