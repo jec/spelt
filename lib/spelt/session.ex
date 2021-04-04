@@ -39,8 +39,8 @@ defmodule Spelt.Session do
       ) do
     Logger.info("Authenticating user #{username}")
     case Matrix.split_user_id(username) do
-      [user, ^hostname] -> _log_in(hostname, user, password, params)
-      [user, nil] -> _log_in(hostname, user, password, params)
+      [identifier, ^hostname] -> do_log_in(identifier, hostname, password, params)
+      [identifier, nil] -> do_log_in(identifier, hostname, password, params)
       _ ->
         Logger.info("Authentication failed for #{username}: not local")
         @response_403
@@ -51,30 +51,41 @@ defmodule Spelt.Session do
     @response_400
   end
 
-  defp _log_in(hostname, username, password, params) do
-    result = match([{u, User}])
-             |> where(u.identifier == ^username and u.password == ^password)
-             |> return([u])
-             |> Spelt.Repo.one()
+  defp do_log_in(username, hostname, password, params) do
+    match([{u, User}])
+    |> where(u.identifier == ^username)
+    |> return([u])
+    |> Spelt.Repo.one()
+    |> check_password(username, hostname, password, params)
+  end
 
-    if result do
-      # Use existing device_id or generate a new one.
-      device_id = case params do
-        %{"device_id" => id} -> id
-        _ -> UUID.uuid4()
-      end
+  defp check_password(nil, username, _hostname, _password, _params) do
+    Logger.info("Authentication failed for #{username}: unknown user")
+    @response_403
+  end
 
-      %{
-        body: %{
-          user_id: Matrix.user_to_fq_user_id(%{host: hostname}, username),
-          access_token: "foo",
-          device_id: device_id
-        },
-        status: 200
-      }
-    else
-      Logger.info("Authentication failed for #{username}: user not found")
-      @response_403
+  defp check_password(%{} = record, username, hostname, password, params) do
+    case record
+         |> Map.get("u")
+         |> Argon2.check_pass(password, hash_key: :encryptedPassword) do
+      {:ok, _} ->
+        # Use existing device_id or generate a new one.
+        device_id = case params do
+          %{"device_id" => id} -> id
+          _ -> UUID.uuid4()
+        end
+
+        %{
+          body: %{
+            user_id: Matrix.user_to_fq_user_id(%{host: hostname}, username),
+            access_token: "foo",
+            device_id: device_id
+          },
+          status: 200
+        }
+      {:error, message} ->
+        Logger.info("Authentication failed for #{username}: #{message}")
+        @response_403
     end
   end
 end

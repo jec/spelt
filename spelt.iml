@@ -101,6 +101,13 @@
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/seraph" />
       <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/meck" />
       <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/espec" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/bcrypt_elixir" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/comeonin" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/elixir_make" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/argon2_elixir" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/elixir_make" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/comeonin" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/argon2_elixir" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="phoenix" level="project" />
@@ -172,5 +179,9 @@
     <orderEntry type="library" name="decimal" level="project" />
     <orderEntry type="library" name="espec" level="project" />
     <orderEntry type="library" name="meck" level="project" />
+    <orderEntry type="library" name="comeonin" level="project" />
+    <orderEntry type="library" name="bcrypt_elixir" level="project" />
+    <orderEntry type="library" name="elixir_make" level="project" />
+    <orderEntry type="library" name="argon2_elixir" level="project" />
   </component>
 </module>
