@@ -28,3 +28,5 @@ spelt-*.tar
 /priv/static/
 
 /.idea/
+
+.env*

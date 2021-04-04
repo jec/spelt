@@ -3,13 +3,6 @@ defmodule Spelt.SessionTest do
 
   alias Spelt.Session
 
-  def create_user(username, password) do
-    cypher = """
-      CREATE (:User {user_id: '#{username}', password: '#{password}'})
-    """
-    {:ok, _} = Bolt.Sips.conn() |> Bolt.Sips.query(cypher)
-  end
-
   describe "Session.login_types/0" do
     test "returns supported login types" do
       assert Session.login_types() == ~w(m.login.password)
@@ -19,12 +12,12 @@ defmodule Spelt.SessionTest do
   describe "Session.log_in/2" do
     test "with valid credentials and FQ user ID, returns status 200" do
       host = "example.cc"
-      username = "phred.smerd"
-      user_id = "@#{username}:#{host}"
+      identifier = "phred.smerd"
+      user_id = "@#{identifier}:#{host}"
       password = UUID.uuid4()
       conn = %{host: host}
 
-      create_user(username, password)
+      {:ok, _} = Spelt.Repo.Node.create(build(:user, identifier: identifier, password: password))
 
       params = %{
         "type" => "m.login.password",
@@ -37,24 +30,24 @@ defmodule Spelt.SessionTest do
       }
 
       assert %{
-        body: %{
-          user_id: ^user_id,
-          access_token: _,
-          device_id: _
-        },
-        status: 200
-      } = Session.log_in(conn, params)
+               body: %{
+                 user_id: ^user_id,
+                 access_token: _,
+                 device_id: _
+               },
+               status: 200
+             } = Session.log_in(conn, params)
     end
 
-    test "with valid credentials and a device_id, returns status 200" do
+    test "with valid credentials and a device_id, returns the same device_id and status 200" do
       host = "example.cc"
-      username = "phred.smerd"
-      user_id = "@#{username}:#{host}"
+      identifier = "phred.smerd"
+      user_id = "@#{identifier}:#{host}"
       password = UUID.uuid4()
       conn = %{host: host}
-      device_id = "mydeviceid"
+      device_id = UUID.uuid4()
 
-      create_user(username, password)
+      {:ok, _} = Spelt.Repo.Node.create(build(:user, identifier: identifier, password: password))
 
       params = %{
         "type" => "m.login.password",
@@ -79,12 +72,12 @@ defmodule Spelt.SessionTest do
 
     test "with invalid credentials, returns status 403" do
       host = "example.cc"
-      username = "phred.smerd"
-      user_id = "@#{username}:#{host}"
+      identifier = "phred.smerd"
+      user_id = "@#{identifier}:#{host}"
       password = UUID.uuid4()
       conn = %{host: host}
 
-      create_user(username, password)
+      {:ok, _} = Spelt.Repo.Node.create(build(:user, identifier: identifier, password: password))
 
       params = %{
         "type" => "m.login.password",

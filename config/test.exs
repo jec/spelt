@@ -6,10 +6,10 @@ config :spelt, SpeltWeb.Endpoint,
   http: [port: 4002],
   server: false
 
-# Neo4j connection
-config :bolt_sips, Bolt,
-       url: "bolt://localhost:7697",
-       basic_auth: [username: "neo4j", password: "9*Ep$Wy#Re8gK4oMggv"],
+# Neo4j connection through Seraph
+config :spelt, Spelt.Repo,
+       url: to_string(:os.getenv('TEST_DB_URL')),
+       basic_auth: [username: "neo4j", password: to_string(:os.getenv('TEST_DB_PASSWORD'))],
        pool_size: 10
 
 # Print only warnings and errors during test

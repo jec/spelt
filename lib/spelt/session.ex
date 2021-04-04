@@ -3,10 +3,11 @@ defmodule Spelt.Session do
   Implements actions related to logging in and logging out the user
   """
 
+  import Seraph.Query
   require Logger
 
   alias Spelt.Matrix
-  alias Bolt.Sips, as: Bolt
+  alias Spelt.Session.User
 
   @response_400 %{
     body: %{
@@ -51,13 +52,12 @@ defmodule Spelt.Session do
   end
 
   defp _log_in(hostname, username, password, params) do
-    cypher = """
-      MATCH (user:User {user_id: '#{username}', password: '#{password}'})
-      RETURN user
-    """
-    response = Bolt.conn() |> Bolt.query!(cypher) |> Bolt.Response.first()
+    result = match([{u, User}])
+             |> where(u.identifier == ^username and u.password == ^password)
+             |> return([u])
+             |> Spelt.Repo.one()
 
-    if response do
+    if result do
       # Use existing device_id or generate a new one.
       device_id = case params do
         %{"device_id" => id} -> id
