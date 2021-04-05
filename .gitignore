@@ -30,3 +30,4 @@ spelt-*.tar
 /.idea/
 
 .env*
+!.env*.example
