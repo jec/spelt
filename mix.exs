@@ -38,7 +38,7 @@ defmodule Spelt.MixProject do
       {:ecto, "~> 3.5.0"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.2"},
-      {:joken, "~> 2.3"},
+      {:joken, "~> 2.3.0"},
       {:phoenix, "~> 1.5.8"},
       {:phoenix_live_dashboard, "~> 0.4"},
       {:plug_cowboy, "~> 2.0"},

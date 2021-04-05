@@ -19,6 +19,12 @@ config :spelt, Spelt.Repo,
        basic_auth: [username: "neo4j", password: to_string(:os.getenv('DEV_DB_PASSWORD'))],
        pool_size: 10
 
+# Joken
+config :joken, default: [
+  signer_alg: "RS256",
+  key_pem: to_string(:os.getenv('DEV_JWT_KEY'))
+]
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
