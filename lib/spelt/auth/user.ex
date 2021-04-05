@@ -6,11 +6,19 @@ defmodule Spelt.Auth.User do
   use Seraph.Schema.Node
   import Seraph.Changeset
 
+  alias Spelt.Auth.Relationship.NoProperties
+
   node "User" do
     property :identifier, :string
     property :encryptedPassword, :string
     property :name, :string
     property :email, :string
+
+    outgoing_relationship "AUTHENTICATED_AS",
+                          Spelt.Auth.Session,
+                          :sessions,
+                          NoProperties.UserToSession.AuthenticatedAs,
+                          cardinality: :many
   end
 
   # TODO: This isn't working. Figure out how to do this.
