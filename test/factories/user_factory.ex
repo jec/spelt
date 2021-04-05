@@ -7,7 +7,7 @@ defmodule Spelt.UserFactory do
         name = Map.get(attrs, :name, Faker.Person.name())
         email = Map.get(attrs, :email, Faker.Internet.email())
 
-        %Spelt.Session.User{
+        %Spelt.Auth.User{
           identifier: identifier,
           name: name,
           email: email

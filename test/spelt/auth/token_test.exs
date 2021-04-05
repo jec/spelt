@@ -1,7 +1,7 @@
-defmodule Spelt.Session.TokenTest do
+defmodule Spelt.Auth.TokenTest do
   use Spelt.Case
 
-  alias Spelt.Session.Token
+  alias Spelt.Auth.Token
 
   describe "Token.generate_and_sign" do
     test "returns a valid JWT" do

@@ -1,4 +1,4 @@
-defmodule Spelt.Session do
+defmodule Spelt.Auth do
   @moduledoc """
   Implements actions related to logging in and logging out the user
   """
@@ -7,7 +7,7 @@ defmodule Spelt.Session do
   require Logger
 
   alias Spelt.Matrix
-  alias Spelt.Session.User
+  alias Spelt.Auth.User
 
   def login_types, do: ~w(m.login.password)
 

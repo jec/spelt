@@ -1,4 +1,4 @@
-defmodule Spelt.Session.User do
+defmodule Spelt.Auth.User do
   @moduledoc """
   Represents a user
   """
@@ -16,7 +16,7 @@ defmodule Spelt.Session.User do
   # TODO: This isn't working. Figure out how to do this.
   def __schema__(:redact_fields), do: [:password]
 
-  def changeset(%Spelt.Session.User{} = user, params \\ %{}) do
+  def changeset(%Spelt.Auth.User{} = user, params \\ %{}) do
     user
     |> cast(params, [:identifier, :passwordHash, :name, :email])
   end

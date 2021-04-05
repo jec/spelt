@@ -11,11 +11,11 @@ defmodule SpeltWeb.R0.LoginController do
   @response_403 %{errcode: "M_FORBIDDEN"}
 
   def show(conn, _params) do
-    json(conn, %{flows: Enum.map(Spelt.Session.login_types(), fn x -> %{type: x} end)})
+    json(conn, %{flows: Enum.map(Spelt.Auth.login_types(), fn x -> %{type: x} end)})
   end
 
   def create(conn, params) do
-    case Spelt.Session.log_in(conn, params) do
+    case Spelt.Auth.log_in(conn, params) do
       {:ok, body} ->
         conn
         |> put_status(200)
@@ -33,11 +33,11 @@ defmodule SpeltWeb.R0.LoginController do
 
   def delete(conn, _params) do
     case Plug.Conn.get_req_header(conn, "authorization") do
-      [] -> Spelt.Session.log_out(nil)
+      [] -> Spelt.Auth.log_out(nil)
       [auth] ->
         case Regex.run(@token_pattern, auth) do
-          [] -> Spelt.Session.log_out(nil)
-          [_, token] -> Spelt.Session.log_out(token)
+          [] -> Spelt.Auth.log_out(nil)
+          [_, token] -> Spelt.Auth.log_out(token)
         end
     end
 

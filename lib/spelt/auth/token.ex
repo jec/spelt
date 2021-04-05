@@ -1,4 +1,4 @@
-defmodule Spelt.Session.Token do
+defmodule Spelt.Auth.Token do
   @moduledoc """
   Configures the generation and validation of JWTs
   """
