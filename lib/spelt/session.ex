@@ -9,21 +9,6 @@ defmodule Spelt.Session do
   alias Spelt.Matrix
   alias Spelt.Session.User
 
-  @response_400 %{
-    body: %{
-      errcode: "M_UNKNOWN",
-      error: "Unsupported or missing login type"
-    },
-    status: 400
-  }
-
-  @response_403 %{
-    body: %{
-      errcode: "M_FORBIDDEN"
-    },
-    status: 403
-  }
-
   def login_types, do: ~w(m.login.password)
 
   def log_in(
@@ -43,12 +28,21 @@ defmodule Spelt.Session do
       [identifier, nil] -> do_log_in(identifier, hostname, password, params)
       _ ->
         Logger.info("Authentication failed for #{username}: not local")
-        @response_403
+        {:error, :forbidden}
     end
   end
 
   def log_in(_conn, _params) do
-    @response_400
+    {:error, :bad_request}
+  end
+
+  def log_out(nil) do
+    Logger.info("No access token provided")
+    {:error, :bad_request}
+  end
+
+  def log_out(_access_token) do
+    :ok
   end
 
   defp do_log_in(username, hostname, password, params) do
@@ -61,7 +55,7 @@ defmodule Spelt.Session do
 
   defp check_password(nil, username, _hostname, _password, _params) do
     Logger.info("Authentication failed for #{username}: unknown user")
-    @response_403
+    {:error, :forbidden}
   end
 
   defp check_password(%{} = record, username, hostname, password, params) do
@@ -75,17 +69,16 @@ defmodule Spelt.Session do
           _ -> UUID.uuid4()
         end
 
-        %{
-          body: %{
+        {:ok,
+          %{
             user_id: Matrix.user_to_fq_user_id(%{host: hostname}, username),
             access_token: "foo",
             device_id: device_id
           },
-          status: 200
         }
       {:error, message} ->
         Logger.info("Authentication failed for #{username}: #{message}")
-        @response_403
+        {:error, :forbidden}
     end
   end
 end

@@ -21,6 +21,7 @@ defmodule SpeltWeb.Router do
     scope "/r0", R0 do
       get "/login", LoginController, :show
       post "/login", LoginController, :create
+      post "/logout", LoginController, :delete
     end
   end
 

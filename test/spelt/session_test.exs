@@ -10,7 +10,7 @@ defmodule Spelt.SessionTest do
   end
 
   describe "Session.log_in/2" do
-    test "with valid credentials and FQ user ID, returns status 200" do
+    test "with valid credentials and FQ user ID, returns :ok" do
       host = "example.cc"
       identifier = "phred.smerd"
       user_id = "@#{identifier}:#{host}"
@@ -29,17 +29,17 @@ defmodule Spelt.SessionTest do
         "initial_device_display_name" => "My Device"
       }
 
-      assert %{
-               body: %{
+      assert {
+               :ok,
+               %{
                  user_id: ^user_id,
                  access_token: _,
                  device_id: _
-               },
-               status: 200
+               }
              } = Session.log_in(conn, params)
     end
 
-    test "with valid credentials and local identifier, returns status 200" do
+    test "with valid credentials and local identifier, returns :ok" do
       host = "example.cc"
       identifier = "phred.smerd"
       user_id = "@#{identifier}:#{host}"
@@ -58,17 +58,17 @@ defmodule Spelt.SessionTest do
         "initial_device_display_name" => "My Device"
       }
 
-      assert %{
-               body: %{
+      assert {
+               :ok,
+               %{
                  user_id: ^user_id,
                  access_token: _,
                  device_id: _
-               },
-               status: 200
+               }
              } = Session.log_in(conn, params)
     end
 
-    test "with valid credentials and a device_id, returns the same device_id and status 200" do
+    test "with valid credentials and a device_id, returns :ok with the same device_id" do
       host = "example.cc"
       identifier = "phred.smerd"
       user_id = "@#{identifier}:#{host}"
@@ -89,17 +89,17 @@ defmodule Spelt.SessionTest do
         "initial_device_display_name" => "My Device"
       }
 
-      assert %{
-               body: %{
+      assert {
+               :ok,
+               %{
                  user_id: ^user_id,
                  access_token: _,
                  device_id: ^device_id
-               },
-               status: 200
+               }
              } = Session.log_in(conn, params)
     end
 
-    test "with invalid password, returns status 403" do
+    test "with invalid password, returns :forbidden" do
       host = "example.cc"
       identifier = "phred.smerd"
       user_id = "@#{identifier}:#{host}"
@@ -117,15 +117,29 @@ defmodule Spelt.SessionTest do
         "initial_device_display_name" => "My Device"
       }
 
-      assert %{
-               body: %{
-                 errcode: "M_FORBIDDEN"
-               },
-               status: 403
-             } = Session.log_in(conn, params)
+      assert {:error, :forbidden} = Session.log_in(conn, params)
     end
 
-    test "with unknown user, returns status 403" do
+    test "with non-local user, returns :forbidden" do
+      host = "example.cc"
+      conn = %{host: host}
+
+      {:ok, user} = Spelt.Repo.Node.create(build(:user))
+
+      params = %{
+        "type" => "m.login.password",
+        "identifier" => %{
+          "type" => "m.id.user",
+          "user" => "@#{user.identifier}:not-our-domain.net"
+        },
+        "password" => "bad-password",
+        "initial_device_display_name" => "My Device"
+      }
+
+      assert {:error, :forbidden} = Session.log_in(conn, params)
+    end
+
+    test "with unknown user, returns :forbidden" do
       host = "example.cc"
       conn = %{host: host}
 
@@ -141,23 +155,24 @@ defmodule Spelt.SessionTest do
         "initial_device_display_name" => "My Device"
       }
 
-      assert %{
-               body: %{
-                 errcode: "M_FORBIDDEN"
-               },
-               status: 403
-             } = Session.log_in(conn, params)
+      assert {:error, :forbidden} = Session.log_in(conn, params)
     end
 
-    test "with no `type`, returns status 400" do
+    test "with no `type`, returns :bad_request" do
       conn = %{host: "example.net"}
 
-      assert %{
-               body: %{
-                 errcode: "M_UNKNOWN"
-               },
-               status: 400
-             } = Session.log_in(conn, %{})
+      assert {:error, :bad_request} = Session.log_in(conn, %{})
+    end
+  end
+
+  describe "Session.log_out/1" do
+    test "with a valid token, invalidates the token and returns :ok" do
+      token = UUID.uuid4()
+
+      assert :ok = Session.log_out(token)
+
+      # A second call should fail.
+      assert :error = Session.log_out(token)
     end
   end
 end
