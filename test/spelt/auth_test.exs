@@ -240,4 +240,30 @@ defmodule Spelt.AuthTest do
       assert :error = Auth.log_out(token)
     end
   end
+
+  describe "Auth.log_out_all/1" do
+    test "with a valid token, invalidates all of the user's token and returns :ok" do
+      {:ok, user} = Spelt.Repo.Node.create(build(:user))
+
+      {:ok, %{
+        user_id: _,
+        access_token: token_1,
+        device_id: _
+      }} = Auth.create_session(user, "talk.example.cc")
+
+      {:ok, %{
+        user_id: _,
+        access_token: token_2,
+        device_id: _
+      }} = Auth.create_session(user, "talk.example.cc")
+
+      assert :ok = Auth.log_out_all(token_1)
+
+      # A second call should fail.
+      assert :error = Auth.log_out_all(token_1)
+
+      # A call with another previously valid token should fail.
+      assert :error = Auth.log_out_all(token_2)
+    end
+  end
 end

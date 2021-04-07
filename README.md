@@ -24,11 +24,11 @@ before this becomes a functioning messaging server.
 - [ ] 4.1 Well-known URI
 - [ ] 4.1.1 `GET /.well-known/matrix/client`
 - [ ] 5 Client Authentication
-- [ ] 5.5 Login
+- [x] 5.5 Login
 - [x] 5.5.1 `GET /_matrix/client/r0/login`
 - [x] 5.5.2 `POST /_matrix/client/r0/login`
 - [x] 5.5.3 `POST /_matrix/client/r0/logout`
-- [ ] 5.5.4 `POST /_matrix/client/r0/logout/all`
+- [x] 5.5.4 `POST /_matrix/client/r0/logout/all`
 - [ ] 5.6 Account registration and management
 - [ ] 5.6.1 `POST /_matrix/client/r0/register`
 - [ ] 5.6.2 `POST /_matrix/client/r0/register/email/requestToken`

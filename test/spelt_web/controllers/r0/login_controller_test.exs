@@ -86,4 +86,47 @@ defmodule SpeltWeb.R0.LoginControllerTest do
       assert %{"errcode" => "M_UNKNOWN_TOKEN"} = json_response(response, 401)
     end
   end
+
+  describe "POST /_matrix/client/r0/logout/all" do
+    test "with a valid access token, invalidates all of the user's tokens and returns a 200", %{conn: conn} do
+      {:ok, user} = Spelt.Repo.Node.create(build(:user))
+      hostname = "chat.foo.net"
+      user_id = "@#{user.identifier}:#{hostname}"
+
+      assert {:ok, %{
+               user_id: ^user_id,
+               access_token: token_1,
+               device_id: _
+             }} = Auth.create_session(user, hostname)
+
+      assert {:ok, %{
+               user_id: ^user_id,
+               access_token: token_2,
+               device_id: _
+             }} = Auth.create_session(user, hostname)
+
+      response =
+        conn
+        |> put_req_header("authorization", "Bearer #{token_1}")
+        |> post(Routes.login_path(conn, :delete_all))
+
+      assert %{} = json_response(response, 200)
+
+      # When we try again, we should get a 401.
+      response =
+        conn
+        |> put_req_header("authorization", "Bearer #{token_1}")
+        |> post(Routes.login_path(conn, :delete_all))
+
+      assert %{"errcode" => "M_UNKNOWN_TOKEN"} = json_response(response, 401)
+
+      # When we try another previously valid token for the user, we should get a 401.
+      response =
+        conn
+        |> put_req_header("authorization", "Bearer #{token_2}")
+        |> post(Routes.login_path(conn, :delete_all))
+
+      assert %{"errcode" => "M_UNKNOWN_TOKEN"} = json_response(response, 401)
+    end
+  end
 end

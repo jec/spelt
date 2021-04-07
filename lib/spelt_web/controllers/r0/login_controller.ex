@@ -47,4 +47,26 @@ defmodule SpeltWeb.R0.LoginController do
         |> json(%{errcode: "M_UNKNOWN_TOKEN"})
     end
   end
+
+  def delete_all(conn, _params) do
+    with(
+      [auth] <- Plug.Conn.get_req_header(conn, "authorization"),
+      [_, token] <- Regex.run(@token_pattern, auth),
+      :ok <- Spelt.Auth.log_out_all(token)
+    ) do
+      conn
+      |> put_status(200)
+      |> json(%{})
+    else
+      [] ->
+        conn
+        |> put_status(401)
+        |> json(%{errcode: "M_MISSING_TOKEN"})
+
+      :error ->
+        conn
+        |> put_status(401)
+        |> json(%{errcode: "M_UNKNOWN_TOKEN"})
+    end
+  end
 end

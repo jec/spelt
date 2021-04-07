@@ -22,6 +22,7 @@ defmodule SpeltWeb.Router do
       get "/login", LoginController, :show
       post "/login", LoginController, :create
       post "/logout", LoginController, :delete
+      post "/logout/all", LoginController, :delete_all
     end
   end
 

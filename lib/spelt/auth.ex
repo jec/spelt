@@ -66,6 +66,32 @@ defmodule Spelt.Auth do
     end
   end
 
+  def log_out_all(access_token) do
+    with(
+      {:ok, %{"sub" => user_uuid, "jti" => jti}} <- Token.verify_and_validate(access_token),
+      {user, _} <- get_user_and_session(user_uuid, jti),
+      {:ok, %{stats: %{"nodes-deleted" => count}}} <-
+        match([
+          {u, User, %{uuid: user.uuid}},
+          {s, Session},
+          [{u}, [r, AuthenticatedAs], {s}]
+        ])
+        |> delete([s])
+        |> Spelt.Repo.execute(with_stats: true)
+    ) do
+      Logger.info("Logged out user #{user.identifier} from #{count} sessions")
+      :ok
+    else
+      {:error, message} ->
+        Logger.warn("Authentication failed: token failed validation")
+        :error
+
+      {} ->
+        Logger.warn("Session lookup failed")
+        :error
+    end
+  end
+
   def create_session(user, hostname, device_id \\ nil) do
     # Use existing device_id or generate a new one.
     device_id = device_id || UUID.uuid4()
