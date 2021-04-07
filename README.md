@@ -12,6 +12,10 @@ Spelt is implemented in [Elixir](https://elixir-lang.org/) using
 This is my first Elixir project and serves as a learning experience, so expect
 rough edges and pedantic and non-Elixir-idiomatic code.
 
+## License
+
+Spelt is licensed under the three-clause BSD license. See LICENSE.txt.
+
 ## To Do
 
 This checklist tracks the progress of implementing the endpoints defined in the
