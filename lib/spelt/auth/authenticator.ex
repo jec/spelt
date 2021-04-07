@@ -30,7 +30,7 @@ defmodule Spelt.Auth.Authenticator do
         Logger.error("Authentication failed: missing or bad Authorization header")
 
         conn
-        |> put_status(401)
+        |> put_resp_content_type("application/json")
         |> send_resp(401, Jason.encode!(%{errcode: "M_MISSING_TOKEN"}))
         |> halt()
 
@@ -38,6 +38,7 @@ defmodule Spelt.Auth.Authenticator do
         Logger.error("Authentication failed: JWT failed validation: #{message}")
 
         conn
+        |> put_resp_content_type("application/json")
         |> send_resp(401, Jason.encode!(%{errcode: "M_UNKNOWN_TOKEN"}))
         |> halt()
 
@@ -45,7 +46,7 @@ defmodule Spelt.Auth.Authenticator do
         Logger.error("Authentication failed: no matching User or Session found")
 
         conn
-        |> put_status(401)
+        |> put_resp_content_type("application/json")
         |> send_resp(401, Jason.encode!(%{errcode: "M_UNKNOWN_TOKEN"}))
         |> halt()
 
@@ -53,6 +54,7 @@ defmodule Spelt.Auth.Authenticator do
         Logger.error("Authentication failed: #{inspect(other)}")
 
         conn
+        |> put_resp_content_type("application/json")
         |> send_resp(401, Jason.encode!(%{errcode: "M_UNKNOWN_TOKEN"}))
         |> halt()
     end

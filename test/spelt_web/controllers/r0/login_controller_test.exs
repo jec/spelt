@@ -61,14 +61,7 @@ defmodule SpeltWeb.R0.LoginControllerTest do
     test "with a valid access token, invalidates the token and returns a 200", %{conn: conn} do
       {:ok, user} = Spelt.Repo.Node.create(build(:user))
       hostname = "chat.foo.net"
-      user_id = "@#{user.identifier}:#{hostname}"
-
-      assert {:ok,
-              %{
-                user_id: ^user_id,
-                access_token: token,
-                device_id: _
-              }} = Auth.create_session(user, hostname)
+      {:ok, _, %{access_token: token}} = Auth.create_session(user, hostname)
 
       response =
         conn
@@ -93,21 +86,8 @@ defmodule SpeltWeb.R0.LoginControllerTest do
     } do
       {:ok, user} = Spelt.Repo.Node.create(build(:user))
       hostname = "chat.foo.net"
-      user_id = "@#{user.identifier}:#{hostname}"
-
-      assert {:ok,
-              %{
-                user_id: ^user_id,
-                access_token: token_1,
-                device_id: _
-              }} = Auth.create_session(user, hostname)
-
-      assert {:ok,
-              %{
-                user_id: ^user_id,
-                access_token: token_2,
-                device_id: _
-              }} = Auth.create_session(user, hostname)
+      {:ok, _, %{access_token: token_1}} = Auth.create_session(user, hostname)
+      {:ok, _, %{access_token: token_2}} = Auth.create_session(user, hostname)
 
       response =
         conn

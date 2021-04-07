@@ -9,7 +9,7 @@ defmodule SpeltWeb.R0.LoginController do
 
   def create(conn, params) do
     case Spelt.Auth.log_in(conn, params) do
-      {:ok, body} ->
+      {:ok, _, body} ->
         conn
         |> put_status(200)
         |> json(body)
@@ -26,47 +26,19 @@ defmodule SpeltWeb.R0.LoginController do
     end
   end
 
-  def delete(conn, _params) do
-    with(
-      [auth] <- Plug.Conn.get_req_header(conn, "authorization"),
-      [_, token] <- Regex.run(@token_pattern, auth),
-      :ok <- Spelt.Auth.log_out(token)
-    ) do
-      conn
-      |> put_status(200)
-      |> json(%{})
-    else
-      [] ->
-        conn
-        |> put_status(401)
-        |> json(%{errcode: "M_MISSING_TOKEN"})
+  def delete(%{assigns: %{spelt_user: user, spelt_session: session}} = conn, _params) do
+    :ok = Spelt.Auth.log_out(user, session)
 
-      :error ->
-        conn
-        |> put_status(401)
-        |> json(%{errcode: "M_UNKNOWN_TOKEN"})
-    end
+    conn
+    |> put_status(200)
+    |> json(%{})
   end
 
-  def delete_all(conn, _params) do
-    with(
-      [auth] <- Plug.Conn.get_req_header(conn, "authorization"),
-      [_, token] <- Regex.run(@token_pattern, auth),
-      :ok <- Spelt.Auth.log_out_all(token)
-    ) do
-      conn
-      |> put_status(200)
-      |> json(%{})
-    else
-      [] ->
-        conn
-        |> put_status(401)
-        |> json(%{errcode: "M_MISSING_TOKEN"})
+  def delete_all(%{assigns: %{spelt_user: user}} = conn, _params) do
+    :ok = Spelt.Auth.log_out_all(user)
 
-      :error ->
-        conn
-        |> put_status(401)
-        |> json(%{errcode: "M_UNKNOWN_TOKEN"})
-    end
+    conn
+    |> put_status(200)
+    |> json(%{})
   end
 end

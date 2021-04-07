@@ -22,9 +22,16 @@ defmodule SpeltWeb.Router do
 
     get "/versions", ConfigController, :versions
 
+    # no authorization required
     scope "/r0", R0 do
       get "/login", LoginController, :show
       post "/login", LoginController, :create
+    end
+
+    # authorization required
+    scope "/r0", R0 do
+      pipe_through :authentication
+
       post "/logout", LoginController, :delete
       post "/logout/all", LoginController, :delete_all
     end

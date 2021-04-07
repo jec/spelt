@@ -42,54 +42,24 @@ defmodule Spelt.Auth do
     {:error, :bad_request}
   end
 
-  def log_out(nil) do
-    Logger.info("No access token provided")
-    {:error, :bad_request}
+  def log_out(user, session) do
+    Spelt.Repo.Node.delete(session)
+    Logger.info("Logged out user #{user.identifier}")
+    :ok
   end
 
-  def log_out(access_token) do
-    with(
-      {:ok, %{"sub" => user_uuid, "jti" => jti}} <- Token.verify_and_validate(access_token),
-      {user, session} <- get_user_and_session(user_uuid, jti)
-    ) do
-      Spelt.Repo.Node.delete(session)
-      Logger.info("Logged out user #{user.identifier}")
-      :ok
-    else
-      {:error, message} ->
-        Logger.warn("Authentication failed: #{message}")
-        :error
+  def log_out_all(user) do
+    {:ok, %{stats: %{"nodes-deleted" => count}}} =
+      match([
+        {u, User, %{uuid: user.uuid}},
+        {s, Session},
+        [{u}, [r, AuthenticatedAs], {s}]
+      ])
+      |> delete([s])
+      |> Spelt.Repo.execute(with_stats: true)
 
-      {} ->
-        Logger.warn("Session lookup failed")
-        :error
-    end
-  end
-
-  def log_out_all(access_token) do
-    with(
-      {:ok, %{"sub" => user_uuid, "jti" => jti}} <- Token.verify_and_validate(access_token),
-      {user, _} <- get_user_and_session(user_uuid, jti),
-      {:ok, %{stats: %{"nodes-deleted" => count}}} <-
-        match([
-          {u, User, %{uuid: user.uuid}},
-          {s, Session},
-          [{u}, [r, AuthenticatedAs], {s}]
-        ])
-        |> delete([s])
-        |> Spelt.Repo.execute(with_stats: true)
-    ) do
-      Logger.info("Logged out user #{user.identifier} from #{count} sessions")
-      :ok
-    else
-      {:error, message} ->
-        Logger.warn("Authentication failed: #{message}")
-        :error
-
-      {} ->
-        Logger.warn("Session lookup failed")
-        :error
-    end
+    Logger.info("Logged out user #{user.identifier} from #{count} sessions")
+    :ok
   end
 
   def create_session(user, hostname, device_id \\ nil) do
@@ -105,7 +75,7 @@ defmodule Spelt.Auth do
     {:ok, _} =
       Spelt.Repo.Relationship.create(%AuthenticatedAs{start_node: user, end_node: session})
 
-    {:ok,
+    {:ok, session,
      %{
        user_id: Matrix.user_to_fq_user_id(%{host: hostname}, user.identifier),
        access_token: token,
