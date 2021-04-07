@@ -7,7 +7,9 @@ defmodule Spelt.Auth.TokenTest do
     test "returns a valid JWT" do
       user_uuid = UUID.uuid4()
 
-      assert {:ok, token, %{"sub" => ^user_uuid, "jti" => _}} = Token.generate_and_sign(%{"sub" => user_uuid})
+      assert {:ok, token, %{"sub" => ^user_uuid, "jti" => _}} =
+               Token.generate_and_sign(%{"sub" => user_uuid})
+
       assert {:ok, %{"sub" => ^user_uuid}} = Token.verify_and_validate(token)
     end
   end

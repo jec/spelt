@@ -13,11 +13,12 @@ defmodule Spelt.AuthTest do
       user_id = "@#{user.identifier}:#{hostname}"
       user_uuid = user.uuid
 
-      assert {:ok, %{
-        user_id: ^user_id,
-        access_token: token,
-        device_id: ^device_id
-      }} = Auth.create_session(user, hostname, device_id)
+      assert {:ok,
+              %{
+                user_id: ^user_id,
+                access_token: token,
+                device_id: ^device_id
+              }} = Auth.create_session(user, hostname, device_id)
 
       assert {:ok, %{"sub" => ^user_uuid, "jti" => jti}} = Token.verify_and_validate(token)
       assert Spelt.Repo.Node.get_by(Session, jti: jti)
@@ -29,11 +30,12 @@ defmodule Spelt.AuthTest do
       user_id = "@#{user.identifier}:#{hostname}"
       user_uuid = user.uuid
 
-      assert {:ok, %{
-               user_id: ^user_id,
-               access_token: token,
-               device_id: _
-             }} = Auth.create_session(user, hostname)
+      assert {:ok,
+              %{
+                user_id: ^user_id,
+                access_token: token,
+                device_id: _
+              }} = Auth.create_session(user, hostname)
 
       assert {:ok, %{"sub" => ^user_uuid, "jti" => jti}} = Token.verify_and_validate(token)
       assert Spelt.Repo.Node.get_by(Session, jti: jti)
@@ -44,9 +46,12 @@ defmodule Spelt.AuthTest do
     test "with matching user and session, returns {user, session}" do
       {:ok, %{uuid: user_uuid} = user} = Spelt.Repo.Node.create(build(:user))
       {:ok, %{jti: jti} = session} = Spelt.Repo.Node.create(build(:session))
-      {:ok, _} = Spelt.Repo.Relationship.create(%AuthenticatedAs{start_node: user, end_node: session})
 
-      assert {%User{uuid: ^user_uuid}, %Session{jti: ^jti}} = Auth.get_user_and_session(user_uuid, jti)
+      {:ok, _} =
+        Spelt.Repo.Relationship.create(%AuthenticatedAs{start_node: user, end_node: session})
+
+      assert {%User{uuid: ^user_uuid}, %Session{jti: ^jti}} =
+               Auth.get_user_and_session(user_uuid, jti)
     end
 
     test "with no matching user, returns {}" do

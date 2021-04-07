@@ -1,7 +1,7 @@
 defmodule SpeltWeb.R0.LoginController do
   use SpeltWeb, :controller
 
-  @token_pattern  ~r/^Bearer (.+)$/
+  @token_pattern ~r/^Bearer (.+)$/
 
   @response_400 %{
     errcode: "M_UNKNOWN",
@@ -20,10 +20,12 @@ defmodule SpeltWeb.R0.LoginController do
         conn
         |> put_status(200)
         |> json(body)
+
       {:error, :forbidden} ->
         conn
         |> put_status(403)
         |> json(@response_403)
+
       {:error, :bad_request} ->
         conn
         |> put_status(400)
@@ -33,7 +35,9 @@ defmodule SpeltWeb.R0.LoginController do
 
   def delete(conn, _params) do
     case Plug.Conn.get_req_header(conn, "authorization") do
-      [] -> Spelt.Auth.log_out(nil)
+      [] ->
+        Spelt.Auth.log_out(nil)
+
       [auth] ->
         case Regex.run(@token_pattern, auth) do
           [] -> Spelt.Auth.log_out(nil)

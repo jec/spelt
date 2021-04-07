@@ -8,15 +8,16 @@ config :spelt, SpeltWeb.Endpoint,
 
 # Neo4j connection through Seraph
 config :spelt, Spelt.Repo,
-       url: to_string(:os.getenv('TEST_DB_URL')),
-       basic_auth: [username: "neo4j", password: to_string(:os.getenv('TEST_DB_PASSWORD'))],
-       pool_size: 10
+  url: to_string(:os.getenv('TEST_DB_URL')),
+  basic_auth: [username: "neo4j", password: to_string(:os.getenv('TEST_DB_PASSWORD'))],
+  pool_size: 10
 
 # Joken
-config :joken, default: [
-  signer_alg: "RS256",
-  key_pem: to_string(:os.getenv('TEST_JWT_KEY'))
-]
+config :joken,
+  default: [
+    signer_alg: "RS256",
+    key_pem: to_string(:os.getenv('TEST_JWT_KEY'))
+  ]
 
 # Print only warnings and errors during test
 config :logger, level: :warn

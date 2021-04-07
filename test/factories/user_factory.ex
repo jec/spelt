@@ -11,7 +11,8 @@ defmodule Spelt.UserFactory do
           identifier: identifier,
           name: name,
           email: email
-        } |> Map.merge(Argon2.add_hash(password, hash_key: :encryptedPassword))
+        }
+        |> Map.merge(Argon2.add_hash(password, hash_key: :encryptedPassword))
       end
     end
   end

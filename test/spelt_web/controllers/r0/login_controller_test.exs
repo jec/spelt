@@ -34,7 +34,7 @@ defmodule SpeltWeb.R0.LoginControllerTest do
       assert %{
                "user_id" => ^user_id,
                "access_token" => _,
-               "device_id" => ^device_id,
+               "device_id" => ^device_id
              } = json_response(response, 200)
     end
 
@@ -59,16 +59,18 @@ defmodule SpeltWeb.R0.LoginControllerTest do
     test "with a valid access token, invalidates the token and returns a 200", %{conn: conn} do
       token = UUID.uuid4()
 
-      response = conn
-             |> put_req_header("authorization", "Bearer #{token}")
-             |> post(Routes.login_path(conn, :delete))
+      response =
+        conn
+        |> put_req_header("authorization", "Bearer #{token}")
+        |> post(Routes.login_path(conn, :delete))
 
       assert json_response(response, 200) == %{}
 
       # When we try again, we should get a 403.
-      response = conn
-                 |> put_req_header("authorization", "Bearer #{token}")
-                 |> post(Routes.login_path(conn, :delete))
+      response =
+        conn
+        |> put_req_header("authorization", "Bearer #{token}")
+        |> post(Routes.login_path(conn, :delete))
 
       assert %{"errcode" => "M_FORBIDDEN"} = json_response(response, 403)
     end

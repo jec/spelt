@@ -24,9 +24,14 @@ defmodule Spelt.Auth do
         } = params
       ) do
     Logger.info("Authenticating user #{username}")
+
     case Matrix.split_user_id(username) do
-      [identifier, ^hostname] -> do_log_in(identifier, hostname, password, params)
-      [identifier, nil] -> do_log_in(identifier, hostname, password, params)
+      [identifier, ^hostname] ->
+        do_log_in(identifier, hostname, password, params)
+
+      [identifier, nil] ->
+        do_log_in(identifier, hostname, password, params)
+
       _ ->
         Logger.info("Authentication failed for #{username}: not local")
         {:error, :forbidden}
@@ -50,10 +55,12 @@ defmodule Spelt.Auth do
             Spelt.Repo.Node.delete(session)
             Logger.info("Logged out user #{user.identifier}")
             :ok
+
           _ ->
             Logger.warn("Token lookup failed")
             :error
         end
+
       {:error, message} ->
         Logger.warn("Authentication failed: token failed validation")
         :error
@@ -66,24 +73,27 @@ defmodule Spelt.Auth do
 
     # Create a Token, a Session and its relationship from User.
     {:ok, token, %{"jti" => jti, "exp" => exp}} = Token.generate_and_sign(%{"sub" => user.uuid})
-    {:ok, session} = Spelt.Repo.Node.create(%Session{jti: jti, expiresAt: DateTime.from_unix!(exp)})
-    {:ok, _} = Spelt.Repo.Relationship.create(%AuthenticatedAs{start_node: user, end_node: session})
+
+    {:ok, session} =
+      Spelt.Repo.Node.create(%Session{jti: jti, expiresAt: DateTime.from_unix!(exp)})
+
+    {:ok, _} =
+      Spelt.Repo.Relationship.create(%AuthenticatedAs{start_node: user, end_node: session})
 
     {:ok,
-      %{
-        user_id: Matrix.user_to_fq_user_id(%{host: hostname}, user.identifier),
-        access_token: token,
-        device_id: device_id
-      },
-    }
+     %{
+       user_id: Matrix.user_to_fq_user_id(%{host: hostname}, user.identifier),
+       access_token: token,
+       device_id: device_id
+     }}
   end
 
   def get_user_and_session(user_uuid, jti) do
     case match([
-      {u, User, %{uuid: user_uuid}},
-      {s, Session, %{jti: jti}},
-      [{u}, [r, AuthenticatedAs], {s}]
-    ])
+           {u, User, %{uuid: user_uuid}},
+           {s, Session, %{jti: jti}},
+           [{u}, [r, AuthenticatedAs], {s}]
+         ])
          |> return([u, s])
          |> Spelt.Repo.one() do
       nil -> {}
@@ -108,7 +118,9 @@ defmodule Spelt.Auth do
     case record
          |> Map.get("u")
          |> Argon2.check_pass(password, hash_key: :encryptedPassword) do
-      {:ok, user} -> create_session(user, hostname, params["device_id"])
+      {:ok, user} ->
+        create_session(user, hostname, params["device_id"])
+
       {:error, message} ->
         Logger.info("Authentication failed for #{username}: #{message}")
         {:error, :forbidden}
