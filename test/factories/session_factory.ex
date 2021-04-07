@@ -1,4 +1,6 @@
 defmodule Spelt.SessionFactory do
+  @moduledoc false
+
   defmacro __using__(_opts) do
     quote do
       def session_factory(attrs) do

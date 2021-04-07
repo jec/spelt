@@ -48,21 +48,20 @@ defmodule Spelt.Auth do
   end
 
   def log_out(access_token) do
-    case Token.verify_and_validate(access_token) do
-      {:ok, %{"sub" => user_uuid, "jti" => jti}} ->
-        case get_user_and_session(user_uuid, jti) do
-          {user, session} ->
-            Spelt.Repo.Node.delete(session)
-            Logger.info("Logged out user #{user.identifier}")
-            :ok
-
-          _ ->
-            Logger.warn("Token lookup failed")
-            :error
-        end
-
+    with(
+      {:ok, %{"sub" => user_uuid, "jti" => jti}} <- Token.verify_and_validate(access_token),
+      {user, session} <- get_user_and_session(user_uuid, jti)
+    ) do
+      Spelt.Repo.Node.delete(session)
+      Logger.info("Logged out user #{user.identifier}")
+      :ok
+    else
       {:error, message} ->
         Logger.warn("Authentication failed: token failed validation")
+        :error
+
+      {} ->
+        Logger.warn("Session lookup failed")
         :error
     end
   end

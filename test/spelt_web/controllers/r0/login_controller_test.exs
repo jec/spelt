@@ -1,6 +1,8 @@
 defmodule SpeltWeb.R0.LoginControllerTest do
   use SpeltWeb.ConnCase
 
+  alias Spelt.Auth
+
   describe "GET /_matrix/client/r0/login" do
     test "returns the supported login types", %{conn: conn} do
       conn = get(conn, Routes.login_path(conn, :show))
@@ -38,7 +40,7 @@ defmodule SpeltWeb.R0.LoginControllerTest do
              } = json_response(response, 200)
     end
 
-    test "with incorrect authentication, returns 403", %{conn: conn} do
+    test "with incorrect credentials, returns 403", %{conn: conn} do
       params = %{
         type: "m.login.password",
         identifier: %{
@@ -57,22 +59,31 @@ defmodule SpeltWeb.R0.LoginControllerTest do
 
   describe "POST /_matrix/client/r0/logout" do
     test "with a valid access token, invalidates the token and returns a 200", %{conn: conn} do
-      token = UUID.uuid4()
+      {:ok, user} = Spelt.Repo.Node.create(build(:user))
+      hostname = "chat.foo.net"
+      user_id = "@#{user.identifier}:#{hostname}"
+
+      assert {:ok,
+              %{
+                user_id: ^user_id,
+                access_token: token,
+                device_id: _
+              }} = Auth.create_session(user, hostname)
 
       response =
         conn
         |> put_req_header("authorization", "Bearer #{token}")
         |> post(Routes.login_path(conn, :delete))
 
-      assert json_response(response, 200) == %{}
+      assert %{} = json_response(response, 200)
 
-      # When we try again, we should get a 403.
+      # When we try again, we should get a 401.
       response =
         conn
         |> put_req_header("authorization", "Bearer #{token}")
         |> post(Routes.login_path(conn, :delete))
 
-      assert %{"errcode" => "M_FORBIDDEN"} = json_response(response, 403)
+      assert %{"errcode" => "M_UNKNOWN_TOKEN"} = json_response(response, 401)
     end
   end
 end

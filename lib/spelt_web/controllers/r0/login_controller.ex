@@ -3,13 +3,6 @@ defmodule SpeltWeb.R0.LoginController do
 
   @token_pattern ~r/^Bearer (.+)$/
 
-  @response_400 %{
-    errcode: "M_UNKNOWN",
-    error: "Unsupported or missing login type"
-  }
-
-  @response_403 %{errcode: "M_FORBIDDEN"}
-
   def show(conn, _params) do
     json(conn, %{flows: Enum.map(Spelt.Auth.login_types(), fn x -> %{type: x} end)})
   end
@@ -24,29 +17,34 @@ defmodule SpeltWeb.R0.LoginController do
       {:error, :forbidden} ->
         conn
         |> put_status(403)
-        |> json(@response_403)
+        |> json(%{errcode: "M_FORBIDDEN"})
 
       {:error, :bad_request} ->
         conn
         |> put_status(400)
-        |> json(@response_400)
+        |> json(%{errcode: "M_UNKNOWN", error: "Unsupported or missing login type"})
     end
   end
 
   def delete(conn, _params) do
-    case Plug.Conn.get_req_header(conn, "authorization") do
+    with(
+      [auth] <- Plug.Conn.get_req_header(conn, "authorization"),
+      [_, token] <- Regex.run(@token_pattern, auth),
+      :ok <- Spelt.Auth.log_out(token)
+    ) do
+      conn
+      |> put_status(200)
+      |> json(%{})
+    else
       [] ->
-        Spelt.Auth.log_out(nil)
+        conn
+        |> put_status(401)
+        |> json(%{errcode: "M_MISSING_TOKEN"})
 
-      [auth] ->
-        case Regex.run(@token_pattern, auth) do
-          [] -> Spelt.Auth.log_out(nil)
-          [_, token] -> Spelt.Auth.log_out(token)
-        end
+      :error ->
+        conn
+        |> put_status(401)
+        |> json(%{errcode: "M_UNKNOWN_TOKEN"})
     end
-
-    conn
-    |> put_status(200)
-    |> json(%{})
   end
 end
