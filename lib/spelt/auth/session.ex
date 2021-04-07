@@ -13,7 +13,8 @@ defmodule Spelt.Auth.Session do
     property :expiresAt, :utc_datetime
 
     incoming_relationship "AUTHENTICATED_AS",
-                          Spelt.Auth.User, :user,
+                          Spelt.Auth.User,
+                          :user,
                           NoProperties.UserToSession.AuthenticatedAs,
                           cardinality: :one
   end

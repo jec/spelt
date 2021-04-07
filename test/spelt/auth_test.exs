@@ -2,6 +2,57 @@ defmodule Spelt.AuthTest do
   use Spelt.Case
 
   alias Spelt.Auth
+  alias Spelt.Auth.{Session, Token, User}
+  alias Spelt.Auth.Relationship.NoProperties.UserToSession.AuthenticatedAs
+
+  describe "Auth.create_session/3" do
+    test "with a device_id, creates a Session with the given device_id" do
+      {:ok, user} = Spelt.Repo.Node.create(build(:user))
+      device_id = UUID.uuid4()
+      hostname = "chat.foo.net"
+      user_id = "@#{user.identifier}:#{hostname}"
+      user_uuid = user.uuid
+
+      assert {:ok, %{
+        user_id: ^user_id,
+        access_token: token,
+        device_id: ^device_id
+      }} = Auth.create_session(user, hostname, device_id)
+
+      assert {:ok, %{"sub" => ^user_uuid, "jti" => jti}} = Token.verify_and_validate(token)
+      assert Spelt.Repo.Node.get_by(Session, jti: jti)
+    end
+
+    test "with no device_id, creates a Session with a new device_id" do
+      {:ok, user} = Spelt.Repo.Node.create(build(:user))
+      hostname = "chat.foo.net"
+      user_id = "@#{user.identifier}:#{hostname}"
+      user_uuid = user.uuid
+
+      assert {:ok, %{
+               user_id: ^user_id,
+               access_token: token,
+               device_id: _
+             }} = Auth.create_session(user, hostname)
+
+      assert {:ok, %{"sub" => ^user_uuid, "jti" => jti}} = Token.verify_and_validate(token)
+      assert Spelt.Repo.Node.get_by(Session, jti: jti)
+    end
+  end
+
+  describe "Auth.get_user_and_session/2" do
+    test "with matching user and session, returns {user, session}" do
+      {:ok, %{uuid: user_uuid} = user} = Spelt.Repo.Node.create(build(:user))
+      {:ok, %{jti: jti} = session} = Spelt.Repo.Node.create(build(:session))
+      {:ok, _} = Spelt.Repo.Relationship.create(%AuthenticatedAs{start_node: user, end_node: session})
+
+      assert {%User{uuid: ^user_uuid}, %Session{jti: ^jti}} = Auth.get_user_and_session(user_uuid, jti)
+    end
+
+    test "with no matching user, returns {}" do
+      assert {} = Auth.get_user_and_session("foo", "bar")
+    end
+  end
 
   describe "Auth.login_types/0" do
     test "returns supported login types" do
@@ -167,7 +218,16 @@ defmodule Spelt.AuthTest do
 
   describe "Auth.log_out/1" do
     test "with a valid token, invalidates the token and returns :ok" do
-      token = UUID.uuid4()
+      {:ok, user} = Spelt.Repo.Node.create(build(:user))
+
+      {
+        :ok,
+        %{
+          user_id: _,
+          access_token: token,
+          device_id: _
+        }
+      } = Auth.create_session(user, "talk.example.cc")
 
       assert :ok = Auth.log_out(token)
 

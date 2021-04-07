@@ -8,6 +8,6 @@ defmodule Spelt.Auth.Token do
   @issuer "https://chat.spelt.io/"
 
   def token_config do
-    default_claims(default_exp: 60 * 60, iss: @issuer, aud: @issuer, skip: [:jti]) # expire in 1 hour
+    default_claims(default_exp: 60 * 60, iss: @issuer, aud: @issuer) # expire in 1 hour
   end
 end
