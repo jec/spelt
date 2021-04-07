@@ -88,22 +88,26 @@ defmodule SpeltWeb.R0.LoginControllerTest do
   end
 
   describe "POST /_matrix/client/r0/logout/all" do
-    test "with a valid access token, invalidates all of the user's tokens and returns a 200", %{conn: conn} do
+    test "with a valid access token, invalidates all of the user's tokens and returns a 200", %{
+      conn: conn
+    } do
       {:ok, user} = Spelt.Repo.Node.create(build(:user))
       hostname = "chat.foo.net"
       user_id = "@#{user.identifier}:#{hostname}"
 
-      assert {:ok, %{
-               user_id: ^user_id,
-               access_token: token_1,
-               device_id: _
-             }} = Auth.create_session(user, hostname)
+      assert {:ok,
+              %{
+                user_id: ^user_id,
+                access_token: token_1,
+                device_id: _
+              }} = Auth.create_session(user, hostname)
 
-      assert {:ok, %{
-               user_id: ^user_id,
-               access_token: token_2,
-               device_id: _
-             }} = Auth.create_session(user, hostname)
+      assert {:ok,
+              %{
+                user_id: ^user_id,
+                access_token: token_2,
+                device_id: _
+              }} = Auth.create_session(user, hostname)
 
       response =
         conn

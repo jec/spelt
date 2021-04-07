@@ -57,7 +57,7 @@ defmodule Spelt.Auth do
       :ok
     else
       {:error, message} ->
-        Logger.warn("Authentication failed: token failed validation")
+        Logger.warn("Authentication failed: #{message}")
         :error
 
       {} ->
@@ -83,7 +83,7 @@ defmodule Spelt.Auth do
       :ok
     else
       {:error, message} ->
-        Logger.warn("Authentication failed: token failed validation")
+        Logger.warn("Authentication failed: #{message}")
         :error
 
       {} ->

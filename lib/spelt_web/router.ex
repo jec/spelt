@@ -5,6 +5,10 @@ defmodule SpeltWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :authentication do
+    plug Spelt.Auth.Authenticator
+  end
+
   # This one may not need to be implemented here but instead handled by the
   # proxy.
   # scope "/.well-known/matrix", SpeltWeb do
