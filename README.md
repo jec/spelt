@@ -20,9 +20,9 @@ before this becomes a functioning messaging server.
 
 - [x] 2 API Standards
 - [x] 2.1 `GET /_matrix/client/versions`
-- [ ] 4 Server Discovery
-- [ ] 4.1 Well-known URI
-- [ ] 4.1.1 `GET /.well-known/matrix/client`
+- [x] 4 Server Discovery
+- [x] 4.1 Well-known URI
+- [x] 4.1.1 `GET /.well-known/matrix/client`
 - [ ] 5 Client Authentication
 - [x] 5.5 Login
 - [x] 5.5.1 `GET /_matrix/client/r0/login`

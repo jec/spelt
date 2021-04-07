@@ -9,13 +9,11 @@ defmodule SpeltWeb.Router do
     plug Spelt.Auth.Authenticator
   end
 
-  # This one may not need to be implemented here but instead handled by the
-  # proxy.
-  # scope "/.well-known/matrix", SpeltWeb do
-  #   pipe_through :api
-  #
-  #   get "/client", ConfigController, :client
-  # end
+  scope "/.well-known", SpeltWeb do
+    pipe_through :api
+
+    get "/matrix/client", ConfigController, :well_known
+  end
 
   scope "/_matrix/client", SpeltWeb do
     pipe_through :api
