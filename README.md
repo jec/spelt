@@ -1,9 +1,23 @@
 # Spelt
 
-Spelt aims to be a server implementation of the [Matrix client-server
-specification](https://matrix.org/docs/spec/client_server/r0.6.1), which
-provides messaging functionality used by Matrix-compliant clients. The target
-version of the spec is 0.6.1.
+Matrix defines a set of open APIs for decentralized communication, suitable for
+securely publishing, persisting and subscribing to data over a global open
+federation of servers with no single point of control. Uses include Instant
+Messaging (IM), Voice over IP (VoIP) signalling, Internet of Things (IoT)
+communication, and bridging together existing communication silos—providing
+the basis of a new, open, real-time communication ecosystem.
+
+Spelt aims to be a server implementation of the Matrix API. The following are
+the relevant components of the specification:
+
+* [Matrix client-server
+  specification](https://matrix.org/docs/spec/client_server/r0.6.1): provides
+  messaging functionality used by Matrix-compliant clients (target version
+  0.6.1)
+
+* [Matrix server-server
+  specification](https://matrix.org/docs/spec/server_server/r0.1.4.html):
+  provides federation amongst servers (target version 0.1.4)
 
 Spelt is implemented in [Elixir](https://elixir-lang.org/) using
 [Phoenix](https://www.phoenixframework.org/) as the web app framework and
@@ -18,9 +32,13 @@ Spelt is licensed under the three-clause BSD license. See LICENSE.txt.
 
 ## To Do
 
+Spelt is under active development, and much work remains before this becomes a
+functioning messaging server.
+
+### Client-Server
+
 This checklist tracks the progress of implementing the endpoints defined in the
-client-server spec. Spelt is under active development, and much work remains
-before this becomes a functioning messaging server.
+client-server spec. 
 
 - [x] 2 API Standards
 - [x] 2.1 `GET /_matrix/client/versions`
@@ -212,3 +230,8 @@ before this becomes a functioning messaging server.
 - [ ] 13.31 Room Upgrades
 - [ ] 13.31.2 Client behaviour
 - [ ] 13.31.2.1 `POST /_matrix/client/r0/rooms/{roomId}/upgrade`
+
+### Server-Server
+
+The relevant endpoints for implementing the federation specification will
+follow eventually.
