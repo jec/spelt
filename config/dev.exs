@@ -19,6 +19,12 @@ config :spelt, Spelt.Repo,
   basic_auth: [username: "neo4j", password: to_string(:os.getenv('DEV_DB_PASSWORD'))],
   pool_size: 10
 
+# Matrix /.well-known/matrix/client URLs
+# `homeserver` is required; `identity_server` is optional.
+config :spelt, :well_known, %{
+  homeserver: "http://localhost:4000/"
+}
+
 # Joken
 config :joken,
   default: [

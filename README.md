@@ -127,8 +127,8 @@ client-server spec.
 - [ ] 11.1 User Directory
 - [ ] 11.1.1 `POST /_matrix/client/r0/user_directory/search`
 - [ ] 11.2 Profiles
-- [ ] 11.2.1 `PUT /_matrix/client/r0/profile/{userId}/displayname`
-- [ ] 11.2.2 `GET /_matrix/client/r0/profile/{userId}/displayname`
+- [x] 11.2.1 `PUT /_matrix/client/r0/profile/{userId}/displayname`
+- [x] 11.2.2 `GET /_matrix/client/r0/profile/{userId}/displayname`
 - [ ] 11.2.3 `PUT /_matrix/client/r0/profile/{userId}/avatar_url`
 - [ ] 11.2.4 `GET /_matrix/client/r0/profile/{userId}/avatar_url`
 - [ ] 11.2.5 `GET /_matrix/client/r0/profile/{userId}`

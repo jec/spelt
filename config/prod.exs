@@ -13,6 +13,12 @@ config :spelt, SpeltWeb.Endpoint,
   url: [host: "example.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
+# Matrix /.well-known/matrix/client URLs
+# `homeserver` is required; `identity_server` is optional.
+config :spelt, :well_known, %{
+  homeserver: "https://chat.spelt.io/"
+}
+
 # Do not print debug messages in production
 config :logger, level: :info
 

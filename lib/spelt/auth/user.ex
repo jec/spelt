@@ -11,7 +11,7 @@ defmodule Spelt.Auth.User do
   node "User" do
     property :identifier, :string
     property :encryptedPassword, :string
-    property :name, :string
+    property :displayName, :string
     property :email, :string
 
     outgoing_relationship "AUTHENTICATED_AS",
@@ -26,6 +26,6 @@ defmodule Spelt.Auth.User do
 
   def changeset(%Spelt.Auth.User{} = user, params \\ %{}) do
     user
-    |> cast(params, [:identifier, :passwordHash, :name, :email])
+    |> cast(params, [:identifier, :encryptedPassword, :displayName, :email])
   end
 end

@@ -1,8 +1,6 @@
 defmodule SpeltWeb.R0.LoginController do
   use SpeltWeb, :controller
 
-  @token_pattern ~r/^Bearer (.+)$/
-
   def show(conn, _params) do
     json(conn, %{flows: Enum.map(Spelt.Auth.login_types(), fn x -> %{type: x} end)})
   end

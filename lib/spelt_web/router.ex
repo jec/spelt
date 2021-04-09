@@ -24,6 +24,8 @@ defmodule SpeltWeb.Router do
     scope "/r0", R0 do
       get "/login", LoginController, :show
       post "/login", LoginController, :create
+
+      get "/profile/:user_id/displayname", ProfileController, :show_display_name
     end
 
     # authorization required
@@ -32,6 +34,8 @@ defmodule SpeltWeb.Router do
 
       post "/logout", LoginController, :delete
       post "/logout/all", LoginController, :delete_all
+
+      put "/profile/:user_id/displayname", ProfileController, :update_display_name
     end
   end
 

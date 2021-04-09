@@ -15,7 +15,7 @@ config :spelt, Spelt.Repo,
 # Matrix /.well-known/matrix/client URLs
 # `homeserver` is required; `identity_server` is optional.
 config :spelt, :well_known, %{
-  homeserver: "http://localhost:4000/"
+  homeserver: "http://test.example.com/"
 }
 
 # Joken
