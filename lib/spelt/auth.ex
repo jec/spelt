@@ -13,7 +13,6 @@ defmodule Spelt.Auth do
   def login_types, do: ~w(m.login.password)
 
   def log_in(
-        %{host: hostname},
         %{
           "type" => "m.login.password",
           "password" => password,
@@ -24,13 +23,14 @@ defmodule Spelt.Auth do
         } = params
       ) do
     Logger.info("Authenticating user #{username}")
+    hostname = Spelt.Config.hostname()
 
     case Matrix.split_user_id(username) do
       [identifier, ^hostname] ->
-        do_log_in(identifier, hostname, password, params)
+        do_log_in(identifier, password, params)
 
       [identifier, nil] ->
-        do_log_in(identifier, hostname, password, params)
+        do_log_in(identifier, password, params)
 
       _ ->
         Logger.info("Authentication failed for #{username}: not local")
@@ -38,7 +38,7 @@ defmodule Spelt.Auth do
     end
   end
 
-  def log_in(_conn, _params) do
+  def log_in(_params) do
     {:error, :bad_request}
   end
 
@@ -62,7 +62,7 @@ defmodule Spelt.Auth do
     :ok
   end
 
-  def create_session(user, hostname, device_id \\ nil) do
+  def create_session(user, device_id \\ nil) do
     # Use existing device_id or generate a new one.
     device_id = device_id || UUID.uuid4()
 
@@ -77,7 +77,7 @@ defmodule Spelt.Auth do
 
     {:ok, session,
      %{
-       user_id: Matrix.user_to_fq_user_id(%{host: hostname}, user.identifier),
+       user_id: Matrix.user_to_fq_user_id(user.identifier),
        access_token: token,
        device_id: device_id
      }}
@@ -96,25 +96,25 @@ defmodule Spelt.Auth do
     end
   end
 
-  defp do_log_in(username, hostname, password, params) do
+  defp do_log_in(username, password, params) do
     match([{u, User}])
     |> where(u.identifier == ^username)
     |> return([u])
     |> Spelt.Repo.one()
-    |> check_password(username, hostname, password, params)
+    |> check_password(username, password, params)
   end
 
-  defp check_password(nil, username, _hostname, _password, _params) do
+  defp check_password(nil, username, _password, _params) do
     Logger.info("Authentication failed for #{username}: unknown user")
     {:error, :forbidden}
   end
 
-  defp check_password(%{} = record, username, hostname, password, params) do
+  defp check_password(%{} = record, username, password, params) do
     case record
          |> Map.get("u")
          |> Argon2.check_pass(password, hash_key: :encryptedPassword) do
       {:ok, user} ->
-        create_session(user, hostname, params["device_id"])
+        create_session(user, params["device_id"])
 
       {:error, message} ->
         Logger.info("Authentication failed for #{username}: #{message}")

@@ -5,7 +5,9 @@ defmodule Spelt.Matrix do
 
   @fq_pattern ~r{^(@?)([-a-z0-9._=/]+)(:([-a-zA-Z0-9.]+))?$}
 
-  def user_to_fq_user_id(%{host: hostname}, username) do
+  def user_to_fq_user_id(username) do
+    hostname = Spelt.Config.hostname()
+
     case split_user_id(username) do
       [user, nil] -> "@#{user}:#{hostname}"
       [_user, _host] -> username

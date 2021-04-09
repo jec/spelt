@@ -6,7 +6,7 @@ defmodule SpeltWeb.R0.LoginController do
   end
 
   def create(conn, params) do
-    case Spelt.Auth.log_in(conn, params) do
+    case Spelt.Auth.log_in(params) do
       {:ok, _, body} ->
         conn
         |> put_status(200)

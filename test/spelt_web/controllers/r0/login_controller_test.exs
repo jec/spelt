@@ -13,12 +13,10 @@ defmodule SpeltWeb.R0.LoginControllerTest do
 
   describe "POST /_matrix/client/r0/login" do
     test "with correct authentication, returns 200 and a token", %{conn: conn} do
-      identifier = "phred.smerd"
-      user_id = "@#{identifier}:#{conn.host}"
       password = UUID.uuid4()
+      {:ok, user} = Spelt.Repo.Node.create(build(:user, password: password))
+      user_id = "@#{user.identifier}:#{Spelt.Config.hostname()}"
       device_id = UUID.uuid4()
-
-      {:ok, _} = Spelt.Repo.Node.create(build(:user, identifier: identifier, password: password))
 
       params = %{
         type: "m.login.password",
@@ -60,8 +58,7 @@ defmodule SpeltWeb.R0.LoginControllerTest do
   describe "POST /_matrix/client/r0/logout" do
     test "with a valid access token, invalidates the token and returns a 200", %{conn: conn} do
       {:ok, user} = Spelt.Repo.Node.create(build(:user))
-      hostname = "chat.foo.net"
-      {:ok, _, %{access_token: token}} = Auth.create_session(user, hostname)
+      {:ok, _, %{access_token: token}} = Auth.create_session(user)
 
       response =
         conn
@@ -85,9 +82,8 @@ defmodule SpeltWeb.R0.LoginControllerTest do
       conn: conn
     } do
       {:ok, user} = Spelt.Repo.Node.create(build(:user))
-      hostname = "chat.foo.net"
-      {:ok, _, %{access_token: token_1}} = Auth.create_session(user, hostname)
-      {:ok, _, %{access_token: token_2}} = Auth.create_session(user, hostname)
+      {:ok, _, %{access_token: token_1}} = Auth.create_session(user)
+      {:ok, _, %{access_token: token_2}} = Auth.create_session(user)
 
       response =
         conn

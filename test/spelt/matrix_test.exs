@@ -22,11 +22,8 @@ defmodule Spelt.MatrixTest do
 
   describe "Matrix.user_to_fq_user_id/2" do
     test "returns the fully qualified user ID" do
-      conn = %{host: "foobar.net"}
-      assert Matrix.user_to_fq_user_id(conn, "phred.smerd") == "@phred.smerd:foobar.net"
-
-      assert Matrix.user_to_fq_user_id(conn, "@phred.smerd:example.cc") ==
-               "@phred.smerd:example.cc"
+      assert Matrix.user_to_fq_user_id("phred.smerd") == "@phred.smerd:#{Spelt.Config.hostname()}"
+      assert Matrix.user_to_fq_user_id("@phred.smerd:example.cc") == "@phred.smerd:example.cc"
     end
   end
 end
