@@ -1,0 +1,42 @@
+# Elixir CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-elixir/ for more details
+version: 2
+jobs:
+  build:
+    docker:
+    - image: circleci/elixir:1.11
+    - image: neo4j:4.2
+    working_directory: ~/app
+    steps:
+    - checkout
+    - run: mix local.hex --force  # install Hex locally (without prompt)
+    - run: mix local.rebar --force  # fetch a copy of rebar (without prompt)
+    - restore_cache:
+        keys:
+        - v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
+        - v1-mix-cache-{{ .Branch }}
+        - v1-mix-cache
+    - restore_cache:
+        keys:
+        - v1-build-cache-{{ .Branch }}
+        - v1-build-cache
+    - run: mix do deps.get, compile
+    - save_cache:
+        key: v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
+        paths:
+        - deps
+    - save_cache:
+        key: v1-build-cache-{{ .Branch }}
+        paths:
+        - _build
+    - run:
+        name: Wait for Neo4j
+        command: dockerize -wait tcp://localhost:7687 -timeout 1m
+    - run:
+        name:
+        command: mix test
+        environment:
+          TEST_DB_URL: bolt://localhost:7474
+          TEST_DB_USER: neo4j
+          TEST_DB_PASSWORD: neo4j
