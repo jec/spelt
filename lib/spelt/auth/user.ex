@@ -6,7 +6,8 @@ defmodule Spelt.Auth.User do
   use Seraph.Schema.Node
   import Seraph.Changeset
 
-  alias Spelt.Auth.Relationship.NoProperties
+  alias Spelt.Auth.Relationship.NoProperties.UserToSession.AuthenticatedAs
+  alias Spelt.Notifications.Relationship.NoProperties.UserToPusher.NotifiedBy
 
   node "User" do
     property :identifier, :string
@@ -17,7 +18,13 @@ defmodule Spelt.Auth.User do
     outgoing_relationship "AUTHENTICATED_AS",
                           Spelt.Auth.Session,
                           :sessions,
-                          NoProperties.UserToSession.AuthenticatedAs,
+                          AuthenticatedAs,
+                          cardinality: :many
+
+    outgoing_relationship "NOTIFIED_BY",
+                          Spelt.Notifications.Pusher,
+                          :pushers,
+                          NotifiedBy,
                           cardinality: :many
   end
 

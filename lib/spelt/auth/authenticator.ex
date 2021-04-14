@@ -27,7 +27,7 @@ defmodule Spelt.Auth.Authenticator do
       |> assign(:spelt_session, session)
     else
       [] ->
-        Logger.error("Authentication failed: missing or bad Authorization header")
+        Logger.info("Authentication failed: missing or bad Authorization header")
 
         conn
         |> put_resp_content_type("application/json")
@@ -35,7 +35,7 @@ defmodule Spelt.Auth.Authenticator do
         |> halt()
 
       {:error, message} ->
-        Logger.error("Authentication failed: JWT failed validation: #{message}")
+        Logger.info("Authentication failed: JWT failed validation: #{message}")
 
         conn
         |> put_resp_content_type("application/json")
@@ -43,7 +43,7 @@ defmodule Spelt.Auth.Authenticator do
         |> halt()
 
       {} ->
-        Logger.error("Authentication failed: no matching User or Session found")
+        Logger.info("Authentication failed: no matching User or Session found")
 
         conn
         |> put_resp_content_type("application/json")
@@ -51,7 +51,7 @@ defmodule Spelt.Auth.Authenticator do
         |> halt()
 
       other ->
-        Logger.error("Authentication failed: #{inspect(other)}")
+        Logger.info("Authentication failed: #{inspect(other)}")
 
         conn
         |> put_resp_content_type("application/json")
