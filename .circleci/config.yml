@@ -42,3 +42,31 @@ jobs:
           TEST_DB_URL: bolt://localhost:7687
           TEST_DB_USER: ""
           TEST_DB_PASSWORD: ""
+          TEST_JWT_KEY: |
+            -----BEGIN RSA PRIVATE KEY-----
+            MIIEowIBAAKCAQEA0iVH7O+EwHQJFzcLtLoqUMiXBaWxmiy+ePTHMP5bTaAlCaY7
+            s0b9IiSX3pA5Ib9wba8eOsE2BU42QlxLZrR+QEbQKjz8nyWinoHO8reiRU6bC1vG
+            dVgLlKZppK/h6+jHVFB6OYoDkuFKNMXKJPFOtH6LAGWSjBYemkjLk3/9AOBdGtEZ
+            bg3B+4E8ZF9FJKDc0yiG2CJV2GBNL+4eLEKpvjPluqM9kAlX2HKlFE73v1EAuAOk
+            XYlfsq+y7eXJIoMCO/EVCP/2Jb1IuP5ankAtMG+YUikaiFY2fseFTJ+Tl26Y1AaJ
+            rs1sPKEnGKnXblnDgz/MY3hoP6QU+u1A9pQ6xQIDAQABAoIBAD4cOrfyyv++y/kK
+            kfEmnN8niktm/6kb1GgXoNAAPaghzxCdC0QflS2EN0bWxawN0wL4IS0ocfj7dtoC
+            QV7ntfD1fQ0e3WOEUh4bK7ldQR7O7tBanbuM/E9BKDQ+r710HYX0C0v6WLgO0knq
+            s6Zbk/GQ/TBu1POGjiD3pwO/bl3VaVBu3d6ZzI/FC4bXpoqs8B95JJwghNN9RcE3
+            azfIueGsvJYQro8ionr01MBhiz0RUkcquOFqbTxbJVqhMGHwRqPkSWktQPTEWgX7
+            eN72xUmxcJd2ckTqAprJwv9lQ2chXxLU0zVV4vad4dZHJ9D7RNN0aq486qjRRvGt
+            uZ8hGkECgYEA6zUhvLUNQxEkIhYOId7sa1j64Wi9TJYgZi4md1L9fOhs5apxNsiy
+            3TOYxKtM57d0iS9nJYRY10ZAl8g4Pip81W+vFjQgoaA+v4+FJbcOI4Kxk8a6kGJ4
+            K9aL/8OJ/8c2/QbGddnfnKTfryOh8vBYXhb4KOOZ8CItLCvL50DNIHkCgYEA5Lj8
+            K+HYP/wvOZqIeCtpSOXSWMpIFHCO62NoEM0cqIjS5DgXiGFYTtm5tkK0Cd0jgAMW
+            PlnYqYiG33BXyDLGcDLo7TwHt6uDd97jIyk6mUEsgJuD+uQ7P9sBNs3HfB/f+1Ob
+            0xibwpTPf5FQV9emjL7CeCQt93iUHuCsNdRnUa0CgYEAxuxpuxKYw8cEezuR+j1y
+            UBuyGt+dcd9qSWDwsWxj7LcaGmc7Vu0IsSIJKxQBd9vlWHzZzJYRGQhWasgwIQuI
+            Bm9tcebmTiubxiFYp5wY/hlznBqwAJr3LYRHZSl4VfWjYP3Q7S01/GJIt/P37OIu
+            qmzctqA/uiL9d2UXD17z3WkCgYAOCH+IXbn76wgmu6GF5fv2ugsW4Ypcnq9WJ+o5
+            pawNdx+hWwOunXJinB813I/ZTxUfhJD30GFnvXWw/d6U7PCZ77W04IsErORLFYTQ
+            InZy8rm9Rk1ptlkgSNqhNyz3I6mFbRLRd+AOpzy38f2A9j1Ew2uBHY8ocOB9qIFI
+            aDjSnQKBgGJlfmhC5BNq2qem6/KfwdKl9IVzjwh2n/qTOiWdnf+pbaJhGtJbIwJE
+            1AJpJoPs9YD24W+bjKKSU2s39Dz/+VNvQIeG4uWQjJUZV6VIXQn5pbbbg9N5w5f0
+            MORTCcGKUpnwf9Su8YzoFw3GgWetUgxD97TToCXEpA0wTrmaG8aZ
+            -----END RSA PRIVATE KEY-----
