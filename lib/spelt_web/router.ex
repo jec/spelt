@@ -36,6 +36,8 @@ defmodule SpeltWeb.Router do
       post "/logout/all", LoginController, :delete_all
 
       put "/profile/:user_id/displayname", ProfileController, :update_display_name
+
+      get "/thirdparty/protocols", ThirdPartyController, :protocol_index
     end
   end
 

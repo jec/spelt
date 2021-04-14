@@ -219,7 +219,7 @@ client-server spec.
 - [ ] 13.26.1.1 `POST /_matrix/client/r0/rooms/{roomId}/report/{eventId}`
 - [ ] 13.27 Third Party Networks
 - [ ] 13.27.1 Third Party Lookups
-- [ ] 13.27.1.1 `GET /_matrix/client/r0/thirdparty/protocols`
+- [x] 13.27.1.1 `GET /_matrix/client/r0/thirdparty/protocols`
 - [ ] 13.27.1.2 `GET /_matrix/client/r0/thirdparty/protocol/{protocol}`
 - [ ] 13.27.1.3 `GET /_matrix/client/r0/thirdparty/location/{protocol}`
 - [ ] 13.27.1.4 `GET /_matrix/client/r0/thirdparty/user/{protocol}`
