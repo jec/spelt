@@ -1,3 +1,5 @@
+[![jec](https://circleci.com/gh/jec/spelt.svg?style=shield)](https://circleci.com/gh/jec/spelt)
+
 # Spelt
 
 Matrix defines a set of open APIs for decentralized communication, suitable for

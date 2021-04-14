@@ -7,6 +7,8 @@ jobs:
     docker:
     - image: circleci/elixir:1.11
     - image: neo4j:4.2
+      environment:
+        NEO4J_AUTH: none
     working_directory: ~/app
     steps:
     - checkout
@@ -37,6 +39,6 @@ jobs:
         name:
         command: mix test
         environment:
-          TEST_DB_URL: bolt://localhost:7474
-          TEST_DB_USER: neo4j
-          TEST_DB_PASSWORD: neo4j
+          TEST_DB_URL: bolt://localhost:7687
+          TEST_DB_USER: ""
+          TEST_DB_PASSWORD: ""
