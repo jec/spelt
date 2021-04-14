@@ -61,15 +61,15 @@ defmodule Spelt.Notifications do
 
   def delete_pushers(user, push_key, app_id) do
     case match([
-        {u, User, %{uuid: user.uuid}},
-        {p, Pusher, %{pushKey: push_key, appId: app_id}},
-        [{u}, [r, NotifiedBy], {p}]
-      ])
-      |> delete([p])
-      |> Spelt.Repo.execute(with_stats: true)
-    do
+           {u, User, %{uuid: user.uuid}},
+           {p, Pusher, %{pushKey: push_key, appId: app_id}},
+           [{u}, [r, NotifiedBy], {p}]
+         ])
+         |> delete([p])
+         |> Spelt.Repo.execute(with_stats: true) do
       {:ok, %{stats: %{"nodes-deleted" => count}}} ->
         {:ok, count}
+
       {:ok, %{stats: []}} ->
         {:ok, 0}
     end
