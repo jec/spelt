@@ -60,3 +60,36 @@ defmodule Spelt.Notifications.Pusher do
     ])
   end
 end
+
+defimpl Jason.Encoder, for: Spelt.Notifications.Pusher do
+  # Keys to include in the JSON output
+  @keep [
+    :pushKey,
+    :kind,
+    :appId,
+    :appDisplayName,
+    :deviceDisplayName,
+    :profileTag,
+    :lang,
+    :data
+  ]
+
+  # Keys that need renaming
+  @keymap %{
+    pushKey: :pushkey,
+    kind: :kind,
+    appId: :app_id,
+    appDisplayName: :app_display_name,
+    deviceDisplayName: :device_display_name,
+    profileTag: :profile_tag,
+    lang: :lang,
+    data: :data
+  }
+
+  def encode(value, opts) do
+    value
+    |> Map.take(@keep)
+    |> Map.new(fn {key, value} -> {@keymap[key], value} end)
+    |> Jason.Encode.map(opts)
+  end
+end

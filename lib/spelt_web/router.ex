@@ -38,6 +38,9 @@ defmodule SpeltWeb.Router do
       put "/profile/:user_id/displayname", ProfileController, :update_display_name
 
       get "/thirdparty/protocols", ThirdPartyController, :protocol_index
+
+      get "/pushers", NotificationsController, :pushers_index
+      post "/pushers/set", NotificationsController, :create_pusher
     end
   end
 
