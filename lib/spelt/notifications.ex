@@ -10,6 +10,10 @@ defmodule Spelt.Notifications do
   alias Spelt.Notifications.Pusher
   alias Spelt.Notifications.Relationship.NoProperties.UserToPusher.NotifiedBy
 
+  @doc """
+  Returns a list of Pushers related to a User
+  """
+  @spec get_pushers(User.t()) :: [Pusher.t()]
   def get_pushers(user) do
     match([
       {u, User, %{uuid: user.uuid}},
@@ -21,6 +25,11 @@ defmodule Spelt.Notifications do
     |> Enum.map(fn m -> m["p"] end)
   end
 
+  @doc """
+  Returns a Pusher related to a User with a particular `push_key` and `app_id`;
+  or `nil` if not found
+  """
+  @spec get_pusher(User.t(), String.t(), String.t()) :: nil | Pusher.t()
   def get_pusher(user, push_key, app_id) do
     with(
       %{"p" => pusher} <-
@@ -38,7 +47,12 @@ defmodule Spelt.Notifications do
     end
   end
 
-  def put_pusher(user, %{"kind" => nil} = params) do
+  @doc """
+  Creates, updates or deletes a Pusher, depending on the values in `params`
+  """
+  @spec put_pusher(User.t(), map()) :: Pusher.t() | {:ok, non_neg_integer()}
+  def put_pusher(user, %{"kind" => nil, "pushkey" => push_key, "app_id" => app_id} = params) do
+    delete_pushers(user, push_key, app_id)
   end
 
   def put_pusher(user, %{"append" => false, "pushkey" => push_key, "app_id" => app_id} = params) do
@@ -59,6 +73,11 @@ defmodule Spelt.Notifications do
     |> Spelt.Repo.Node.create()
   end
 
+  @doc """
+  Deletes a Pusher belonging to a specified User with matching `push_key` and
+  `app_id`
+  """
+  @spec delete_pushers(User.t(), String.t(), String.t()) :: {:ok, non_neg_integer()}
   def delete_pushers(user, push_key, app_id) do
     case match([
            {u, User, %{uuid: user.uuid}},

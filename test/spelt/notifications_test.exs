@@ -55,6 +55,15 @@ defmodule Spelt.NotificationsTest do
 
       assert {:ok, %Pusher{}} = Spelt.Notifications.put_pusher(user, params)
     end
+
+    test "with `kind: nil`, deletes matching Pushers" do
+      {:ok, user} = build(:user) |> Spelt.Repo.Node.create()
+      {:ok, pusher} = build(:pusher) |> Spelt.Repo.Node.create()
+      {:ok, _} = Spelt.Repo.Relationship.create(%NotifiedBy{start_node: user, end_node: pusher})
+
+      assert {:ok, 1} = Spelt.Notifications.delete_pushers(user, pusher.pushKey, pusher.appId)
+      refute Spelt.Notifications.get_pusher(user, pusher.pushKey, pusher.appId)
+    end
   end
 
   describe "delete_pushers/3" do

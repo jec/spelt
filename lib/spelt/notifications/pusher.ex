@@ -8,6 +8,17 @@ defmodule Spelt.Notifications.Pusher do
 
   alias Spelt.Notifications.Relationship.NoProperties.UserToPusher.NotifiedBy
 
+  @type t :: %Spelt.Notifications.Pusher{
+          pushKey: String.t(),
+          kind: String.t(),
+          appId: String.t(),
+          appDisplayName: String.t(),
+          deviceDisplayName: String.t(),
+          profileTag: String.t(),
+          lang: String.t(),
+          data: String.t()
+        }
+
   node "Pusher" do
     property :pushKey, :string
     property :kind, :string
