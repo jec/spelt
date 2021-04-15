@@ -20,7 +20,7 @@ defmodule SpeltWeb.Router do
 
     get "/versions", ConfigController, :versions
 
-    # no authorization required
+    # no authentication required
     scope "/r0", R0 do
       get "/login", LoginController, :show
       post "/login", LoginController, :create
@@ -28,7 +28,7 @@ defmodule SpeltWeb.Router do
       get "/profile/:user_id/displayname", ProfileController, :show_display_name
     end
 
-    # authorization required
+    # authentication required
     scope "/r0", R0 do
       pipe_through :authentication
 
@@ -38,6 +38,9 @@ defmodule SpeltWeb.Router do
       put "/profile/:user_id/displayname", ProfileController, :update_display_name
 
       get "/thirdparty/protocols", ThirdPartyController, :protocol_index
+
+      get "/pushers", NotificationsController, :pushers_index
+      post "/pushers/set", NotificationsController, :create_pusher
     end
   end
 

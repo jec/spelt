@@ -174,8 +174,8 @@ client-server spec.
 - [ ] 13.11.5.2.4 `GET /_matrix/client/r0/keys/changes`
 - [ ] 13.13 Push Notifications
 - [ ] 13.13.1 Client behaviour
-- [ ] 13.13.1.1 `GET /_matrix/client/r0/pushers`
-- [ ] 13.13.1.2 `POST /_matrix/client/r0/pushers/set`
+- [x] 13.13.1.1 `GET /_matrix/client/r0/pushers`
+- [x] 13.13.1.2 `POST /_matrix/client/r0/pushers/set`
 - [ ] 13.13.1.3 Listing Notifications
 - [ ] 13.13.1.3.1 `GET /_matrix/client/r0/notifications`
 - [ ] 13.13.1.6 Push Rules: API

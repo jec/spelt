@@ -9,6 +9,13 @@ defmodule Spelt.Auth.User do
   alias Spelt.Auth.Relationship.NoProperties.UserToSession.AuthenticatedAs
   alias Spelt.Notifications.Relationship.NoProperties.UserToPusher.NotifiedBy
 
+  @type t :: %Spelt.Auth.User{
+          identifier: String.t(),
+          encryptedPassword: String.t(),
+          displayName: String.t(),
+          email: String.t()
+        }
+
   node "User" do
     property :identifier, :string
     property :encryptedPassword, :string
