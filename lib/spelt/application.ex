@@ -6,6 +6,30 @@ defmodule Spelt.Application do
   use Application
 
   def start(_type, _args) do
+    # Load Vapor config.
+    providers = [
+      %Vapor.Provider.File{path: "config/#{Mix.env()}.yaml", bindings: [db: "db", jwt: "jwt"]}
+    ]
+
+    vapor_config = Vapor.load!(providers)
+
+    # Set config for Spelt.Repo.
+    neo4j_config = [
+      url: vapor_config.db["url"],
+      basic_auth: [username: vapor_config.db["username"], password: vapor_config.db["password"]],
+      pool_size: vapor_config.db["pool_size"]
+    ]
+
+    Application.put_env(:spelt, Spelt.Repo, neo4j_config)
+
+    # Set config for Joken.
+    joken_config = [
+      signer_alg: vapor_config.jwt["algorithm"],
+      key_pem: vapor_config.jwt["key"]
+    ]
+
+    Application.put_env(:joken, :default, joken_config)
+
     children = [
       # Start the Telemetry supervisor
       SpeltWeb.Telemetry,
@@ -13,7 +37,7 @@ defmodule Spelt.Application do
       {Phoenix.PubSub, name: Spelt.PubSub},
       # Start the Neo4j repo
       Spelt.Repo,
-      {Bolt.Sips, Application.get_env(:spelt, Spelt.Repo)},
+      {Bolt.Sips, neo4j_config},
       # Start the Endpoint (http/https)
       SpeltWeb.Endpoint
       # Start a worker by calling: Spelt.Worker.start_link(arg)

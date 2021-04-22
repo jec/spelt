@@ -29,5 +29,5 @@ spelt-*.tar
 
 /.idea/
 
-.env*
-!.env*.example
+/config/dev.yaml
+/config/test.yaml

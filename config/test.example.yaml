@@ -1,0 +1,12 @@
+---
+# Copy this file to `test.yaml` and fill out the values.
+db:
+  url: "bolt://CHANGEME"
+  username: CHANGEME
+  password: CHANGEME
+jwt:
+  algorithm: RS256
+  key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIE...CHANGEME
+    -----END RSA PRIVATE KEY-----
