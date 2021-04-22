@@ -110,6 +110,16 @@
       <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/argon2_elixir" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/memoize" />
       <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/memoize" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/vapor" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/vapor" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/norm" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/norm" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/yaml_elixir" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/yaml_elixir" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/yamerl" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/yamerl" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/toml" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/toml" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="phoenix" level="project" />
@@ -186,5 +196,10 @@
     <orderEntry type="library" name="elixir_make" level="project" />
     <orderEntry type="library" name="argon2_elixir" level="project" />
     <orderEntry type="library" name="memoize" level="project" />
+    <orderEntry type="library" name="vapor" level="project" />
+    <orderEntry type="library" name="toml" level="project" />
+    <orderEntry type="library" name="yaml_elixir" level="project" />
+    <orderEntry type="library" name="norm" level="project" />
+    <orderEntry type="library" name="yamerl" level="project" />
   </component>
 </module>

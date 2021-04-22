@@ -13,24 +13,11 @@ config :spelt, SpeltWeb.Endpoint,
   check_origin: false,
   watchers: []
 
-# Neo4j connection through Seraph
-config :spelt, Spelt.Repo,
-  url: to_string(:os.getenv('DEV_DB_URL')),
-  basic_auth: [username: "neo4j", password: to_string(:os.getenv('DEV_DB_PASSWORD'))],
-  pool_size: 10
-
 # Matrix /.well-known/matrix/client URLs
 # `homeserver` is required; `identity_server` is optional.
 config :spelt, :well_known, %{
   homeserver: "http://localhost:4000/"
 }
-
-# Joken
-config :joken,
-  default: [
-    signer_alg: "RS256",
-    key_pem: to_string(:os.getenv('DEV_JWT_KEY'))
-  ]
 
 # ## SSL Support
 #

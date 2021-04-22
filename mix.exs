@@ -46,6 +46,7 @@ defmodule Spelt.MixProject do
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:uuid, "~> 1.1"},
+      {:vapor, "~> 0.10.0"},
       # dev and test
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:espec, "~> 1.8.0", only: :test},
